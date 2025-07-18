@@ -1,13 +1,21 @@
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
+import Login from './Pages/Login'
+import Signup from './Pages/Signup'
 
 function App() {
 
 
   return (
-    <>
-      <div className='text-3xl font-bold  text-center bg-gray-800 text-white p-4 rounded-lg'>Welcome</div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        {/* Add more routes as needed */}
+        {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
+        {/* Add more routes as needed */}
+      </Routes>
+    </Router>
   )
 }
 
