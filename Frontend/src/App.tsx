@@ -1,12 +1,12 @@
+
 import './App.css'
 
 function App() {
 
+
   return (
     <>
-      <div>
-        <h1>Hello World</h1>
-      </div>
+      <div className='text-3xl font-bold  text-center bg-gray-800 text-white p-4 rounded-lg'>Welcome</div>
     </>
   )
 }
