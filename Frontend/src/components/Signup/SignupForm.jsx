@@ -34,7 +34,7 @@ const SignupForm = ({
     !confirmPassword;
 
   return (
-    <div className="bg-black/40 backdrop-blur-2xl rounded-2xl shadow-2xl border border-gray-800/60">
+    <div className="bg-black/20 backdrop-blur-2xl rounded-2xl shadow-2xl border border-gray-800/60">
       <div className="p-8 space-y-4">
         <div className="text-center space-y-2">
 

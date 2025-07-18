@@ -20,7 +20,7 @@ const LoginForm = ({
   handleSignupNavigate,
 }) => {
   return (
-    <div className={`w-full bg-black/40 backdrop-blur-2xl rounded-2xl shadow-2xl border border-gray-800/60 transform transition-all duration-500 ${isFormFocused ? 'scale-105 shadow-3xl' : 'scale-100'}`}>
+    <div className={`w-full bg-black/20 backdrop-blur-2xl rounded-2xl shadow-2xl border border-gray-800/60 transform transition-all duration-500 ${isFormFocused ? 'scale-105 shadow-3xl' : 'scale-100'}`}>
       <div className="p-8 space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold text-gray-100">Welcome Back</h2>
