@@ -1,4 +1,5 @@
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash, FaCheck, FaSpinner } from "react-icons/fa";
+import axios from "axios"; // Make sure axios is imported
 
 const SignupForm = ({
   name,
@@ -12,6 +13,7 @@ const SignupForm = ({
   confirmPassword,
   setConfirmPassword,
   errors,
+  setErrors,
   passwordStrength,
   getPasswordStrengthColor,
   showPassword,
@@ -20,9 +22,9 @@ const SignupForm = ({
   setShowConfirmPassword,
   isNameValid,
   isLoading,
+  setIsLoading,
   focusedField,
   setFocusedField,
-  handleSubmit,
   navigate,
 }) => {
   const isFormInvalid =
@@ -33,32 +35,66 @@ const SignupForm = ({
     !password ||
     !confirmPassword;
 
+  // Handle form submit here (no separate handleSubmit prop needed)
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrors({}); // Clear previous errors
+
+    try {
+      const response = await axios.post("http://localhost:3000/doctor/signup", {
+        email,
+        password,
+        name,
+        phoneNumber,
+      });
+
+      console.log("Signup success:", response.data);
+      setErrors({ general: "✅ Account created successfully!" });
+
+      // Navigate after success
+      navigate("/dashboard"); // or wherever you want
+
+    } catch (error) {
+      console.error("Signup error:", error);
+      if (error.response) {
+        setErrors({
+          general: error.response.data.message || "Signup failed",
+          email: error.response.data.errors?.email,
+          password: error.response.data.errors?.password,
+          phoneNumber: error.response.data.errors?.phoneNumber,
+          name: error.response.data.errors?.name,
+        });
+      } else {
+        setErrors({ general: "Server not responding. Please try again later." });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="bg-black/20 backdrop-blur-2xl rounded-2xl shadow-2xl border border-gray-800/60">
       <div className="p-8 space-y-4">
-        <div className="text-center space-y-2">
 
-        </div>
-
-        {/* Error/Success Message */}
+        {/* General Error/Success Message */}
         {errors.general && (
           <div className={`p-4 rounded-lg border transition-all duration-300 ${
-            errors.general.includes('✅') 
-              ? 'bg-green-500/20 border-green-500/50 text-green-300' 
+            errors.general.includes('✅')
+              ? 'bg-green-500/20 border-green-500/50 text-green-300'
               : 'bg-red-500/20 border-red-500/50 text-red-300'
           }`}>
             <p className="text-sm font-medium text-center">{errors.general}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSignup} className="space-y-6">
+
           {/* Name & Email Fields in Parallel */}
           <div className="flex flex-col md:flex-row md:space-x-6 space-y-2 md:space-y-0">
-            {/* Name Field */}
+            {/* Name */}
             <div className="flex-1 space-y-2">
-              <label className="block text-sm font-medium text-gray-400">
-                Full Name
-              </label>
+              <label className="block text-sm font-medium text-gray-400">Full Name</label>
               <div className={`relative transform transition-all duration-300 ${focusedField === 'name' ? 'scale-105' : 'scale-100'}`}>
                 <FaUser className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${focusedField === 'name' ? 'text-gray-200' : 'text-gray-500'}`} />
                 <input
@@ -78,16 +114,14 @@ const SignupForm = ({
               </div>
               {errors.name && (
                 <p className="text-red-400 text-sm flex items-center space-x-1 animate-shake">
-                  <span>⚠️</span>
-                  <span>{errors.name}</span>
+                  <span>⚠️</span><span>{errors.name}</span>
                 </p>
               )}
             </div>
-            {/* Email Field */}
+
+            {/* Email */}
             <div className="flex-1 space-y-2">
-              <label className="block text-sm font-medium text-gray-400">
-                Email Address
-              </label>
+              <label className="block text-sm font-medium text-gray-400">Email Address</label>
               <div className={`relative transform transition-all duration-300 ${focusedField === 'email' ? 'scale-105' : 'scale-100'}`}>
                 <FaEnvelope className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${focusedField === 'email' ? 'text-gray-200' : 'text-gray-500'}`} />
                 <input
@@ -107,18 +141,15 @@ const SignupForm = ({
               </div>
               {errors.email && (
                 <p className="text-red-400 text-sm flex items-center space-x-1 animate-shake">
-                  <span>⚠️</span>
-                  <span>{errors.email}</span>
+                  <span>⚠️</span><span>{errors.email}</span>
                 </p>
               )}
             </div>
           </div>
 
-          {/* Phone Number Field */}
+          {/* Phone Number */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">
-              Phone Number
-            </label>
+            <label className="block text-sm font-medium text-gray-400">Phone Number</label>
             <div className={`relative transform transition-all duration-300 ${focusedField === 'phone' ? 'scale-105' : 'scale-100'}`}>
               <FaPhone className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${focusedField === 'phone' ? 'text-gray-200' : 'text-gray-500'}`} />
               <input
@@ -134,22 +165,19 @@ const SignupForm = ({
                 maxLength="11"
               />
               {phoneNumber && !errors.phoneNumber && /^94\d{9}$/.test(phoneNumber) && (
-              <FaCheck className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FaCheck className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
               )}
             </div>
             {errors.phoneNumber && (
               <p className="text-red-400 text-sm flex items-center space-x-1 animate-shake">
-                <span>⚠️</span>
-                <span>{errors.phoneNumber}</span>
+                <span>⚠️</span><span>{errors.phoneNumber}</span>
               </p>
             )}
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-gray-400">Password</label>
             <div className={`relative transform transition-all duration-300 ${focusedField === 'password' ? 'scale-105' : 'scale-100'}`}>
               <FaLock className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${focusedField === 'password' ? 'text-gray-200' : 'text-gray-500'}`} />
               <input
@@ -174,8 +202,7 @@ const SignupForm = ({
             </div>
             {errors.password && (
               <p className="text-red-400 text-sm flex items-center space-x-1 animate-shake">
-                <span>⚠️</span>
-                <span>{errors.password}</span>
+                <span>⚠️</span><span>{errors.password}</span>
               </p>
             )}
             {password && passwordStrength && (
@@ -188,11 +215,9 @@ const SignupForm = ({
             )}
           </div>
 
-          {/* Confirm Password Field */}
+          {/* Confirm Password */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">
-              Confirm Password
-            </label>
+            <label className="block text-sm font-medium text-gray-400">Confirm Password</label>
             <div className={`relative transform transition-all duration-300 ${focusedField === 'confirmPassword' ? 'scale-105' : 'scale-100'}`}>
               <FaLock className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${focusedField === 'confirmPassword' ? 'text-gray-200' : 'text-gray-500'}`} />
               <input
@@ -217,8 +242,7 @@ const SignupForm = ({
             </div>
             {errors.confirmPassword && (
               <p className="text-red-400 text-sm flex items-center space-x-1 animate-shake">
-                <span>⚠️</span>
-                <span>{errors.confirmPassword}</span>
+                <span>⚠️</span><span>{errors.confirmPassword}</span>
               </p>
             )}
           </div>
@@ -229,7 +253,7 @@ const SignupForm = ({
             disabled={isFormInvalid || isLoading}
             className={`w-full py-3 px-4 rounded-lg font-medium text-gray-100 transition-all duration-300 transform ${
               isFormInvalid || isLoading
-                ? 'bg-gray-700 cursor-not-allowed' 
+                ? 'bg-gray-700 cursor-not-allowed'
                 : 'bg-gradient-to-r from-gray-800 to-black hover:from-black hover:to-gray-900 hover:scale-105 active:scale-95'
             } focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-transparent shadow-lg hover:shadow-xl`}
           >
@@ -253,6 +277,7 @@ const SignupForm = ({
             <button
               onClick={() => navigate("/")}
               className="text-gray-400 hover:text-gray-200 font-medium transition-colors duration-300 hover:underline"
+              type="button"
             >
               Sign in
             </button>
