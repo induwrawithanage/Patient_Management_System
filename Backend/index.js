@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import DoctorRoutes from './Routes/DoctorRoutes.js';
+import cors from 'cors';
 dotenv.config();
 
 const app = express();
@@ -10,7 +11,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(express.json());
-
+app.use(cors());
 // MongoDB Connection
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))

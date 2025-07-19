@@ -1,24 +1,52 @@
+import { useState } from "react";
+import axios from "axios";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaArrowRight, FaSpinner } from "react-icons/fa";
 
-const LoginForm = ({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  errors,
-  showPassword,
-  setShowPassword,
-  isLoading,
-  isFormFocused,
-  setIsFormFocused,
-  emailFocused,
-  setEmailFocused,
-  passwordFocused,
-  setPasswordFocused,
-  handleLogin,
-  handleForgetPassword,
-  handleSignupNavigate,
-}) => {
+const LoginForm = ({ navigateToDashboard, handleForgetPassword, handleSignupNavigate }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFormFocused, setIsFormFocused] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const response = await axios.post("http://localhost:3000/doctor/login", {
+        email,
+        password,
+      });
+
+      console.log("Login success:", response.data);
+      setErrors({ general: "✅ Login successful!" });
+
+      // Example: Navigate to doctor dashboard after login
+      if (navigateToDashboard) {
+        navigateToDashboard();
+      }
+
+    } catch (error) {
+      console.error("Login error:", error);
+      if (error.response) {
+        setErrors({
+          general: error.response.data.message || "Login failed",
+          email: error.response.data.errors?.email,
+          password: error.response.data.errors?.password,
+        });
+      } else {
+        setErrors({ general: "Server not responding. Please try again later." });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={`w-full bg-black/20 backdrop-blur-2xl rounded-2xl shadow-2xl border border-gray-800/60 transform transition-all duration-500 ${isFormFocused ? 'scale-105 shadow-3xl' : 'scale-100'}`}>
       <div className="p-8 space-y-6">
@@ -112,7 +140,7 @@ const LoginForm = ({
             <button
               type="button"
               onClick={handleForgetPassword}
-            className="text-sm text-gray-400 hover:text-gray-200 transition-colors duration-300 hover:underline"
+              className="text-sm text-gray-400 hover:text-gray-200 transition-colors duration-300 hover:underline"
             >
               Forgot password?
             </button>
@@ -147,10 +175,10 @@ const LoginForm = ({
         {/* Sign Up Link */}
         <div className="text-center pt-4 border-t border-gray-600/50">
           <p className="text-sm text-gray-400">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <button
               onClick={handleSignupNavigate}
-            className="text-gray-400 hover:text-gray-200 font-medium transition-colors duration-300 hover:underline"
+              className="text-gray-400 hover:text-gray-200 font-medium transition-colors duration-300 hover:underline"
             >
               Sign up
             </button>
