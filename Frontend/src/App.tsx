@@ -6,20 +6,28 @@ import ForgetPassword from './pages/FogetPassword'
 import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard'
 import PatientProfilePage from './pages/PatientProfile'
-
+import Homepage from './pages/Homepage'
+import PatientProfile from './pages/PatientProfile';
+import SignupPatient from './pages/SignupPatient'
 function App() {
 
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patient-profile" element={<PatientProfilePage />} />
         <Route path="/patient-profile/:patientId" element={<PatientProfilePage />} />
+        <Route path="/patient-profile" element={<PatientProfile />} />
+        <Route path="/patient-profile/:patientId" element={<PatientProfile />} />
+        <Route path="/signup-patient" element={<SignupPatient />} />
+        {/* Add more routes as needed */}
+        {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* Add more routes as needed */}
       </Routes>
     </Router>

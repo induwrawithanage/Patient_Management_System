@@ -28,7 +28,7 @@ interface SignupFormProps {
   navigate: (path: string) => void;
 }
 
-const SignupForm = ({
+const SignupFormPatient = ({
   name,
   setName,
   phoneNumber,
@@ -69,7 +69,7 @@ const SignupForm = ({
     setErrors({}); // Clear previous errors
 
     try {
-      const response = await axios.post("http://localhost:3000/doctor/signup", {
+      const response = await axios.post("http://localhost:3000/patient/signup", {
         fullname: name,
         phone: phoneNumber,
         email,
@@ -329,4 +329,4 @@ const SignupForm = ({
   );
 };
 
-export default SignupForm;
+export default SignupFormPatient;

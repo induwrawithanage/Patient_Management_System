@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import User from '../Models/Doctor.js';
+import User from '../Models/Patient.js';
 import nodemailer from 'nodemailer';
 dotenv.config();
+let refreshTokens = [];
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
-let refreshTokens = [];
 
 // Controller for user signup
 export const signupUser = async (req, res) => {
@@ -34,7 +34,7 @@ export const signupUser = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
-      role: 'doctor', // Default role
+      role: 'patient', // Default role
     });
 
     // Save the user to the database
@@ -71,16 +71,17 @@ export const loginUser = async (req, res) => {
 
     // Generate JWT tokens
     const accessToken = jwt.sign(
-      { email: user.email, role: user.role,userId: user._id,fullname: user.fullname,email: user.email,phone: user.phone,role: user.role ,hospital: user.hospital,national_id: user.national_id},
+      { email: user.email,email: user.email,phone: user.phone,role: user.role,userId: user._id,fullname: user.fullname,bloodgroup: user.bloodgroup,address: user.address,national_id: user.national_id,age: user.age},
       JWT_SECRET,
       { expiresIn: '1d' } // Short-lived access token
     );
 
     const refreshToken = jwt.sign(
-      { email: user.email, role: user.role,userId: user._id,fullname: user.fullname,email: user.email,phone: user.phone,role: user.role ,hospital: user.hospital,national_id: user.national_id},
+      { email: user.email,email: user.email,phone: user.phone,role: user.role,userId: user._id,fullname: user.fullname,bloodgroup: user.bloodgroup,address: user.address,national_id: user.national_id,age: user.age},
       JWT_REFRESH_SECRET,
       { expiresIn: '7d' } // Long-lived refresh token
     );
+    refreshTokens.push(refreshToken);
 
     res.status(200).json({
       message: 'Login successful',
@@ -216,11 +217,11 @@ export const loginUser = async (req, res) => {
 
 
 export const updateinformation = async (req, res) => {
-  const { fullname, email, phone,national_id,hospital } = req.body;
+  const { fullname, email, phone,national_id,age,bloodgroup,adress } = req.body;
 
   // Validate required fields
-  if (!fullname || !email || !phone || !national_id || !hospital) {
-    return res.status(400).json({ message: 'Full name, email, phone, national ID, and hospital are required' });
+  if (!fullname || !email || !phone || !national_id || !age || !bloodgroup || !adress) {
+    return res.status(400).json({ message: 'Full name, email, phone, national ID, age, blood group, and address are required' });
   }
 
   try {
@@ -237,6 +238,9 @@ export const updateinformation = async (req, res) => {
     user.national_id = national_id;
     user.hospital = hospital;
     user.email = email; // Update email if provided
+    user.age = age;
+    user.bloodgroup = bloodgroup;
+    user.address = adress;
 
     // Save the updated user
     await user.save();
@@ -247,7 +251,6 @@ export const updateinformation = async (req, res) => {
     res.status(500).json({ message: 'Error updating user information' });
   }
 }
-
 
 export const getinformation = async (req, res) => {
   // Middleware should have already authenticated the user
@@ -282,9 +285,10 @@ export const refreshToken = (req, res) => {
       role: user.role,
       userId: user.userId,
       fullname: user.fullname,
-      hospital: user.hospital,
+      bloodgroup: user.bloodgroup,
+      address: user.address,
       national_id: user.national_id,
-      
+      age: user.age
     };
 
     const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '150m' });
