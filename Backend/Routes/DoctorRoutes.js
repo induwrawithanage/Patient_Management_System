@@ -1,5 +1,5 @@
 import express from 'express';
-import { signupUser, loginUser,resetPassword,forgetPassword,updateinformation,getinformation } from '../Controller/doctorcontroller.js';
+import { signupUser, loginUser,resetPassword,forgetPassword,updateinformation,getinformation,refreshToken } from '../Controller/doctorcontroller.js';
 import { authenticateToken } from '../Middleware/usermiddleware.js';
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post('/forgetpassword', forgetPassword);
 router.post('/resetpassword', resetPassword);
 router.post('/updateinformation', updateinformation);
 router.get('/getinformation', authenticateToken, getinformation);
-
+router.post('/refresh', refreshToken);
 // Login a doctor
 router.post('/login', loginUser);
 
