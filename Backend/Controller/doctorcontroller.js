@@ -212,3 +212,37 @@ export const loginUser = async (req, res) => {
     throw new Error('Could not send email');
   }
 };
+
+
+export const updateinformation = async (req, res) => {
+  const { fullname, email, phone,national_id,hospital } = req.body;
+
+  // Validate required fields
+  if (!fullname || !email || !phone || !national_id || !hospital) {
+    return res.status(400).json({ message: 'Full name, email, phone, national ID, and hospital are required' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user information
+    user.fullname = fullname;
+    user.phone = phone;
+    user.national_id = national_id;
+    user.hospital = hospital;
+    user.email = email; // Update email if provided
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ message: 'User information updated successfully', status: 'ok' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error updating user information' });
+  }
+}

@@ -8,7 +8,9 @@ const DoctorSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   role: { type: String,default:'patient'}, // Default role for doctors
   resetPasswordToken:{type: String, default:"undefined"},
-  resetPasswordExpires:{type: String, default:"undefined"}
+  resetPasswordExpires:{type: String, default:"undefined"},
+  national_id: { type: String, default: "undefined" },
+  hospital: { type: String, default: "undefined" },
 });
 
 export default mongoose.model('Doctor', DoctorSchema);
