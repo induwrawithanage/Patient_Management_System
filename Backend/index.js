@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import DoctorRoutes from './Routes/DoctorRoutes.js';
+import PatientRoutes from './Routes/PatientRoutes.js';
 import cors from 'cors';
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/doctor', DoctorRoutes);
+app.use('/patient', PatientRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
