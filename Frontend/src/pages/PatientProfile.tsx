@@ -1,27 +1,14 @@
-import { useParams } from 'react-router-dom';
-import PatientProfile from '../components/PatientProfile/PatientProfile';
-
-const PatientProfilePage = () => {
-  const { patientId } = useParams<{ patientId?: string }>();
-  
-  return <PatientProfile patientId={patientId} />;
-};
-
-export default PatientProfilePage;
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PatientHeader from '../components/PatientProfile/PatientHeader';
 import VitalsGrid from '../components/PatientProfile/VitalsGrid';
 import PatientHistory from '../components/PatientProfile/PatientHistory';
 import BackgroundDecorations from '../components/PatientProfile/BackgroundDecorations';
 
-interface PatientProfileProps {
-  patientId?: string;
-}
-
-const PatientProfile: React.FC<PatientProfileProps> = ({ patientId }) => {
+const PatientProfile: React.FC = () => {
+  const { patientId } = useParams<{ patientId?: string }>();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [userRole] = useState<'patient' | 'doctor' | 'admin'>('doctor'); // Simulated role
 
   // TODO: Use patientId to fetch specific patient data when backend is ready
   console.log('Patient ID:', patientId);
