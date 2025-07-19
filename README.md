@@ -47,6 +47,8 @@ A full-stack application  with langchain and blockchain implement system to mana
    PORT='your port number'
    JWT_SECRET='your secret'
    JWT_REFRESH_SECRET='your refresh number'
+   Emailpassword="email secret"
+   Email="idelaize email or like that"
     ```
 
   
