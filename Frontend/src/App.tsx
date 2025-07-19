@@ -7,6 +7,7 @@ import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard'
 import Homepage from './pages/Homepage'
 import PatientProfile from './pages/PatientProfile';
+import SignupPatient from './pages/SignupPatient'
 function App() {
 
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patient-profile" element={<PatientProfile />} />
         <Route path="/patient-profile/:patientId" element={<PatientProfile />} />
+        <Route path="/signup-patient" element={<SignupPatient />} />
         {/* Add more routes as needed */}
         {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* Add more routes as needed */}
