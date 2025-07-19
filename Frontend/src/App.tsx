@@ -6,7 +6,7 @@ import ForgetPassword from './pages/FogetPassword'
 import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard'
 import Homepage from './pages/Homepage'
-import PatientProfile from './components/PatientProfile/PatientProfile';
+import PatientProfile from './pages/PatientProfile';
 function App() {
 
 
