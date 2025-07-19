@@ -1,6 +1,6 @@
 # Patient Management System
 
-A full-stack application to manage patient records, appointments, and healthcare data.
+A full-stack application  with langchain and blockchain implement system to manage patient records, appointments, and healthcare data.
 
 ---
 
@@ -44,7 +44,7 @@ A full-stack application to manage patient records, appointments, and healthcare
 3. set the .env file in the backend
    ``` bash
    MONGODB_URI='your mongouri'
-   PORT='your port number
+   PORT='your port number'
    JWT_SECRET='your secret'
    JWT_REFRESH_SECRET='your refresh number'
     ```
