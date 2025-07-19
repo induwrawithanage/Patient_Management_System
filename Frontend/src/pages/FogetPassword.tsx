@@ -100,7 +100,7 @@ const ForgetPassword = () => {
               <button
                 type="button"
                 className="w-full py-3 rounded-lg bg-black hover:bg-gray-900 text-white font-medium mt-2 transition-all duration-300 border border-gray-700"
-                onClick={() => navigate("/resetpassword")}
+                onClick={() => navigate("/")}
                 disabled={isLoading}
               >
                 Back to Login

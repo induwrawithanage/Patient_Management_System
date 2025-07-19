@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ForgetPassword from './pages/FogetPassword'
 import ResetPassword from './pages/ResetPassword'
+import Dashboard from './pages/Dashboard'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         {/* Add more routes as needed */}
         {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* Add more routes as needed */}
