@@ -103,6 +103,7 @@ const Login = () => {
   };
 
   const navigateToDashboard = () => {
+  
     navigate("/dashboard", { replace: true });
   };
 

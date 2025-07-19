@@ -36,6 +36,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigateToDashboard, handleForget
       });
 
       console.log("Login success:", response.data);
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
       setErrors({ general: "✅ Login successful! Redirecting..." });
 
       // Redirect to dashboard after a short delay
