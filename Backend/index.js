@@ -1,11 +1,27 @@
 import express from 'express';
-const app= express();
-const Port = process.env.PORT || 3000;
-import cors from 'cors';
-import bodyParser from 'body-parser';
-app.use(cors());
-app.use(bodyParser.json());
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-app.listen(Port, () => {
-    console.log(`Server is running on port ${Port}`);
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+// Middleware
+app.use(express.json());
+
+// MongoDB Connection
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('MongoDB connection error:', err));
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('Hello from Patient Management System backend!');
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
