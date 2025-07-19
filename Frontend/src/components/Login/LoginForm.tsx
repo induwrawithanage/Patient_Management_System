@@ -2,17 +2,29 @@ import { useState } from "react";
 import axios from "axios";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaArrowRight, FaSpinner } from "react-icons/fa";
 
-const LoginForm = ({ navigateToDashboard, handleForgetPassword, handleSignupNavigate }) => {
+type LoginFormProps = {
+  navigateToDashboard: () => void;
+  handleForgetPassword: () => void;
+  handleSignupNavigate: () => void;
+};
+
+type LoginErrors = {
+  general?: string;
+  email?: string;
+  password?: string;
+};
+
+const LoginForm: React.FC<LoginFormProps> = ({ navigateToDashboard, handleForgetPassword, handleSignupNavigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<LoginErrors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isFormFocused, setIsFormFocused] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setErrors({});
@@ -24,16 +36,18 @@ const LoginForm = ({ navigateToDashboard, handleForgetPassword, handleSignupNavi
       });
 
       console.log("Login success:", response.data);
-      setErrors({ general: "✅ Login successful!" });
+      setErrors({ general: "✅ Login successful! Redirecting..." });
 
-      // Example: Navigate to doctor dashboard after login
+      // Redirect to dashboard after a short delay
       if (navigateToDashboard) {
-        navigateToDashboard();
+        setTimeout(() => {
+          navigateToDashboard();
+        }, 1500);
       }
 
     } catch (error) {
       console.error("Login error:", error);
-      if (error.response) {
+      if (axios.isAxiosError(error) && error.response) {
         setErrors({
           general: error.response.data.message || "Login failed",
           email: error.response.data.errors?.email,

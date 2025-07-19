@@ -8,7 +8,13 @@ import { clearAuthData } from "../utils/auth";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  type Errors = {
+    email?: string;
+    password?: string;
+    general?: string;
+  };
+  
+  const [errors, setErrors] = useState<Errors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isFormFocused, setIsFormFocused] = useState(false);
@@ -22,7 +28,7 @@ const Login = () => {
   }, []);
 
   const validate = () => {
-    let tempErrors = {};
+    let tempErrors: Errors = {};
 
     // Email validation with better regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,7 +49,7 @@ const Login = () => {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -52,7 +58,7 @@ const Login = () => {
       setErrors({});
       console.log('Attempting login with:', { email, password: '***' });
 
-      const response = await fetch('/api/users/login', {
+      const response = await fetch('/doctor/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,6 +76,7 @@ const Login = () => {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("loggedInUser", data.user?.name || data.user?.email || email);
         localStorage.setItem("userId", data.user?._id || data.user?.id);
+        console.log('Stored in localStorage:')
 
         console.log('Stored in localStorage:', {
           accessToken: localStorage.getItem("accessToken"),
@@ -77,10 +84,11 @@ const Login = () => {
           loggedInUser: localStorage.getItem("loggedInUser"),
           userId: localStorage.getItem("userId"),
         });
-
-        // Success animation before redirect
         setErrors({ general: "✅ Login successful! Redirecting..." });
-        setTimeout(() => navigate("/dashboard"), 1500);
+         setTimeout(() => {
+          navigate("/dashboard", { replace: true });
+        }, 1500);
+        // Success animation before redirect
       } else {
         // Handle login failure (e.g., wrong email/password)
         console.error('Login failed:', data);
@@ -92,6 +100,10 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const navigateToDashboard = () => {
+    navigate("/dashboard", { replace: true });
   };
 
   const handleForgetPassword = () => {
@@ -108,23 +120,9 @@ const Login = () => {
       <div className={`flex flex-col items-center justify-center px-6 py-8 mx-auto w-full max-w-md relative z-10 transform transition-all duration-1000 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
         <LoginHeader />
         <LoginForm
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          errors={errors}
-          showPassword={showPassword}
-          setShowPassword={setShowPassword}
-          isLoading={isLoading}
-          isFormFocused={isFormFocused}
-          setIsFormFocused={setIsFormFocused}
-          emailFocused={emailFocused}
-          setEmailFocused={setEmailFocused}
-          passwordFocused={passwordFocused}
-          setPasswordFocused={setPasswordFocused}
-          handleLogin={handleLogin}
-          handleForgetPassword={handleForgetPassword}
-          handleSignupNavigate={handleSignupNavigate}
+          handleForgetPassword={handleForgetPassword as () => void}
+          handleSignupNavigate={handleSignupNavigate as () => void}
+          navigateToDashboard={navigateToDashboard as () => void}
         />
       </div>
     </section>

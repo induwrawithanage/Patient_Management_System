@@ -10,8 +10,17 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState({});
-  const [passwordStrength, setPasswordStrength] = useState("");
+  type SignupErrors = {
+    name?: string;
+    phoneNumber?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+    general?: string;
+  };
+  
+  const [errors, setErrors] = useState<SignupErrors>({});
+  const [passwordStrength, setPasswordStrength] = useState(""); // Not used, can be removed
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isNameValid, setIsNameValid] = useState(false);
@@ -24,20 +33,9 @@ const Signup = () => {
     setMounted(true);
   }, []);
 
-  const calculatePasswordStrength = (pwd) => {
-    const hasLower = /[a-z]/.test(pwd);
-    const hasUpper = /[A-Z]/.test(pwd);
-    const hasSpecial = /[!@#$%^&*]/.test(pwd);
-    const length = pwd.length >= 8;
+  // Removed unused calculatePasswordStrength
 
-    if (hasLower && hasUpper && hasSpecial && length) return "Strong";
-    if ((hasLower || hasUpper) && length) return "Medium";
-    if (length) return "Weak";
-    if (pwd.length === 0) return "";
-    return "Very Weak";
-  };
-
-  const getPasswordStrengthColor = (strength) => {
+  const getPasswordStrengthColor = (strength: string) => {
     switch (strength) {
       case "Strong": return "text-green-400";
       case "Medium": return "text-yellow-400";
@@ -48,7 +46,7 @@ const Signup = () => {
   };
 
   useEffect(() => {
-    const newErrors = {};
+    const newErrors: SignupErrors = {};
 
     if (name && name.length < 8) {
       newErrors.name = "Name must be at least 8 characters";
@@ -76,61 +74,9 @@ const Signup = () => {
       }
     }
 
-    if (confirmPassword && confirmPassword !== password) {
-      newErrors.confirmPassword = "Passwords must match";
-    }
-
     setErrors(newErrors);
-    setPasswordStrength(calculatePasswordStrength(password));
-  }, [name, phoneNumber, email, password, confirmPassword]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const newErrors = {};
-    if (!name) newErrors.name = "Name is required";
-    if (!phoneNumber) newErrors.phoneNumber = "Phone number is required";
-    if (!email) newErrors.email = "Email is required";
-    if (!password) newErrors.password = "Password is required";
-    if (!confirmPassword)
-      newErrors.confirmPassword = "Confirm Password is required";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          mobileNumber: phoneNumber,
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Signup failed");
-      }
-
-      setErrors({ general: "✅ Signup successful! Redirecting to login..." });
-      setTimeout(() => navigate("/"), 2000);
-    } catch (error) {
-      setErrors({ general: `❌ ${error.message || "Signup failed"}` });
-      console.error("Signup failed", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // No return value needed
+  }, [name, phoneNumber, email, password, setErrors]);
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 flex items-center justify-center relative overflow-hidden">
@@ -149,6 +95,7 @@ const Signup = () => {
           confirmPassword={confirmPassword}
           setConfirmPassword={setConfirmPassword}
           errors={errors}
+          setErrors={setErrors}
           passwordStrength={passwordStrength}
           getPasswordStrengthColor={getPasswordStrengthColor}
           showPassword={showPassword}
@@ -157,14 +104,14 @@ const Signup = () => {
           setShowConfirmPassword={setShowConfirmPassword}
           isNameValid={isNameValid}
           isLoading={isLoading}
+          setIsLoading={setIsLoading}
           focusedField={focusedField}
           setFocusedField={setFocusedField}
-          handleSubmit={handleSubmit}
           navigate={navigate}
         />
       </div>
     </section>
   );
-};
+}
 
 export default Signup;

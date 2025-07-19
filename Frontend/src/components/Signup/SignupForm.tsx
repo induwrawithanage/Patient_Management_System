@@ -1,6 +1,33 @@
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash, FaCheck, FaSpinner } from "react-icons/fa";
 import axios from "axios"; // Make sure axios is imported
 
+interface SignupFormProps {
+  name: string;
+  setName: (name: string) => void;
+  phoneNumber: string;
+  setPhoneNumber: (phone: string) => void;
+  email: string;
+  setEmail: (email: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (confirmPassword: string) => void;
+  errors: Record<string, string>;
+  setErrors: (errors: Record<string, string>) => void;
+  passwordStrength: string;
+  getPasswordStrengthColor: (strength: string) => string;
+  showPassword: boolean;
+  setShowPassword: (show: boolean) => void;
+  showConfirmPassword: boolean;
+  setShowConfirmPassword: (show: boolean) => void;
+  isNameValid: boolean;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+  focusedField: string;
+  setFocusedField: (field: string) => void;
+  navigate: (path: string) => void;
+}
+
 const SignupForm = ({
   name,
   setName,
@@ -26,7 +53,7 @@ const SignupForm = ({
   focusedField,
   setFocusedField,
   navigate,
-}) => {
+}: SignupFormProps) => {
   const isFormInvalid =
     Object.keys(errors).length > 0 ||
     !name ||
@@ -36,28 +63,42 @@ const SignupForm = ({
     !confirmPassword;
 
   // Handle form submit here (no separate handleSubmit prop needed)
-  const handleSignup = async (e) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setErrors({}); // Clear previous errors
 
     try {
       const response = await axios.post("http://localhost:3000/doctor/signup", {
+        fullname: name,
+        phone: phoneNumber,
         email,
         password,
-        name,
-        phoneNumber,
       });
 
       console.log("Signup success:", response.data);
-      setErrors({ general: "✅ Account created successfully!" });
+      setErrors({ general: "✅ Account created successfully! Redirecting to login..." });
 
-      // Navigate after success
-      navigate("/dashboard"); // or wherever you want
+      // Show push notification for signup success
+      if (window.Notification && Notification.permission === "granted") {
+        new Notification("Signup successful! Redirecting to login...");
+      } else if (window.Notification && Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            new Notification("Signup successful! Redirecting to login...");
+          }
+        });
+      }
+
+      // Delay navigation to login page
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
 
     } catch (error) {
       console.error("Signup error:", error);
-      if (error.response) {
+      // Type guard for AxiosError
+      if (axios.isAxiosError(error) && error.response) {
         setErrors({
           general: error.response.data.message || "Signup failed",
           email: error.response.data.errors?.email,
@@ -162,7 +203,7 @@ const SignupForm = ({
                   errors.phoneNumber ? 'border-red-500 focus:ring-red-500' : 'border-gray-700 hover:border-gray-600'
                 }`}
                 placeholder="Enter phone number (94XXXXXXXXX)"
-                maxLength="11"
+                maxLength={11}
               />
               {phoneNumber && !errors.phoneNumber && /^94\d{9}$/.test(phoneNumber) && (
                 <FaCheck className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
