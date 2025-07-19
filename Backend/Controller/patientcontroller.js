@@ -70,13 +70,13 @@ export const loginUser = async (req, res) => {
 
     // Generate JWT tokens
     const accessToken = jwt.sign(
-      { email: user.email, role: user.role },
+      { email: user.email,email: user.email,phone: user.phone,role: user.role,userId: user._id,fullname: user.fullname,bloodgroup: user.bloodgroup,address: user.address,national_id: user.national_id,age: user.age},
       JWT_SECRET,
       { expiresIn: '15m' } // Short-lived access token
     );
 
     const refreshToken = jwt.sign(
-      { email: user.email },
+      { email: user.email,email: user.email,phone: user.phone,role: user.role,userId: user._id,fullname: user.fullname,bloodgroup: user.bloodgroup,address: user.address,national_id: user.national_id,age: user.age},
       JWT_REFRESH_SECRET,
       { expiresIn: '7d' } // Long-lived refresh token
     );
@@ -238,7 +238,7 @@ export const updateinformation = async (req, res) => {
     user.email = email; // Update email if provided
     user.age = age;
     user.bloodgroup = bloodgroup;
-    user.address = address;
+    user.address = adress;
 
     // Save the updated user
     await user.save();
@@ -249,3 +249,13 @@ export const updateinformation = async (req, res) => {
     res.status(500).json({ message: 'Error updating user information' });
   }
 }
+
+export const getinformation = async (req, res) => {
+  // Middleware should have already authenticated the user
+  console.log(req.user);
+  const user = req.user; // this contains { id, email, role } as you set in sign()
+  res.json({
+    message: 'User profile',
+    user,
+  });
+};
