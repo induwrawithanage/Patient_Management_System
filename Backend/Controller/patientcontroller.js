@@ -73,7 +73,7 @@ export const loginUser = async (req, res) => {
     const accessToken = jwt.sign(
       { email: user.email,email: user.email,phone: user.phone,role: user.role,userId: user._id,fullname: user.fullname,bloodgroup: user.bloodgroup,address: user.address,national_id: user.national_id,age: user.age},
       JWT_SECRET,
-      { expiresIn: '15m' } // Short-lived access token
+      { expiresIn: '1d' } // Short-lived access token
     );
 
     const refreshToken = jwt.sign(
