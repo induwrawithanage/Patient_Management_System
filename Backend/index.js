@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
+import DoctorRoutes from './Routes/DoctorRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
   res.send('Hello from Patient Management System backend!');
 });
 
+app.use('/doctor', DoctorRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
