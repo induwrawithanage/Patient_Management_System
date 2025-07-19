@@ -7,6 +7,7 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+let refreshTokens = [];
 
 // Controller for user signup
 export const signupUser = async (req, res) => {
@@ -255,5 +256,42 @@ export const getinformation = async (req, res) => {
   res.json({
     message: 'User profile',
     user,
+  });
+};
+
+
+export const refreshToken = (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token required' });
+  }
+
+  if (!refreshTokens.includes(refreshToken)) {
+    return res.status(403).json({ message: 'Invalid refresh token' });
+  }
+
+  jwt.verify(refreshToken, JWT_REFRESH_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid or expired refresh token' });
+    }
+
+    const payload = {
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      userId: user.userId,
+      fullname: user.fullname,
+      hospital: user.hospital,
+      national_id: user.national_id,
+      
+    };
+
+    const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '150m' });
+
+    res.status(200).json({
+      message: 'Access token refreshed',
+      accessToken: newAccessToken,
+    });
   });
 };
