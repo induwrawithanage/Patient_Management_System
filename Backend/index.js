@@ -1,16 +1,11 @@
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 3000;
+import express from 'express';
+const app= express();
+const Port = process.env.PORT || 3000;
+import cors from 'cors';
+import bodyParser from 'body-parser';
+app.use(cors());
+app.use(bodyParser.json());
 
-// Middleware
-app.use(express.json());
-
-// Routes
-app.get('/', (req, res) => {
-  res.send('Hello from Node.js backend!');
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(Port, () => {
+    console.log(`Server is running on port ${Port}`);
 });
