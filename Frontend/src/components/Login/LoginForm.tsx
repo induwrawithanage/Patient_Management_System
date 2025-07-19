@@ -23,6 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigateToDashboard, handleForget
   const [isFormFocused, setIsFormFocused] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
+  const [userType, setUserType] = useState<'doctor' | 'patient'>('doctor');
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +31,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigateToDashboard, handleForget
     setErrors({});
 
     try {
-      const response = await axios.post("http://localhost:3000/doctor/login", {
+      const endpoint = userType === 'doctor'
+        ? "http://localhost:3000/doctor/login"
+        : "http://localhost:3000/patient/login";
+      const response = await axios.post(endpoint, {
         email,
         password,
       });
@@ -69,6 +73,28 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigateToDashboard, handleForget
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold text-gray-100">Welcome Back</h2>
           <p className="text-gray-400 text-sm">Sign in to access your events</p>
+        </div>
+
+        {/* User Type Toggle - Enhanced UI */}
+        <div className="flex justify-center mb-6">
+          <div className="flex bg-gray-800/60 rounded-full p-1 shadow-inner border border-gray-700">
+            <button
+              type="button"
+              className={`px-6 py-2 rounded-full font-semibold focus:outline-none transition-all duration-200 text-sm
+                ${userType === 'doctor' ? 'bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-md scale-105' : 'text-gray-400 hover:text-white'}`}
+              onClick={() => setUserType('doctor')}
+            >
+              Doctor
+            </button>
+            <button
+              type="button"
+              className={`px-6 py-2 rounded-full font-semibold focus:outline-none transition-all duration-200 text-sm
+                ${userType === 'patient' ? 'bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-md scale-105' : 'text-gray-400 hover:text-white'}`}
+              onClick={() => setUserType('patient')}
+            >
+              Patient
+            </button>
+          </div>
         </div>
 
         {/* Error Message */}
