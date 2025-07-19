@@ -1,3 +1,52 @@
+// Reusable button component for main CTAs
+interface YourButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  className?: string;
+  as?: 'button' | 'a' | 'link';
+  to?: string;
+}
+
+const YourButton: React.FC<YourButtonProps> = ({ children, className = '', as = 'button', to, ...props }) => {
+  const base =
+    'inline-flex items-center justify-center px-8 py-3 sm:px-10 sm:py-4 rounded-full font-semibold text-lg shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
+  const color =
+    'bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-700';
+  const fullClass = `${base} ${color} ${className}`;
+  if (as === 'link' && to) {
+    // @ts-ignore
+    return <Link to={to} className={fullClass}>{children}</Link>;
+  }
+  if (as === 'a' && to) {
+    // Only pass anchor-appropriate props (filter out button-only props)
+    const {
+      autoFocus,
+      hrefLang,
+      media,
+      rel,
+      target,
+      download,
+      referrerPolicy,
+      ...rest
+    } = props as React.AnchorHTMLAttributes<HTMLAnchorElement>;
+    return (
+      <a
+        href={to}
+        className={fullClass}
+        autoFocus={autoFocus}
+        hrefLang={hrefLang}
+        media={media}
+        rel={rel}
+        target={target}
+        download={download}
+        referrerPolicy={referrerPolicy}
+        {...rest}
+      >
+        {children}
+      </a>
+    );
+  }
+  return <button className={fullClass} {...props}>{children}</button>;
+};
 import { useState, useEffect } from "react";
 import { 
   Heart, 
@@ -7,9 +56,11 @@ import {
   FileText, 
   Smartphone,
   ChevronRight,
-  Activity
+  Activity,
+  Circle
 } from "lucide-react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 // Define interfaces for type safety
 interface Feature {
@@ -27,145 +78,71 @@ interface FeatureCardProps {
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, description }) => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-500/50">
-      <Icon className="h-10 w-10 text-blue-600 mb-4" />
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+    <div className="bg-white/5 dark:bg-neutral-950/80 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-800 dark:border-gray-900 hover:border-gray-500/50 dark:hover:border-gray-700/60">
+      <Icon className="h-10 w-10 text-gray-400 dark:text-gray-300 mb-4" />
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{title}</h3>
+      <p className="text-gray-600 dark:text-gray-400">{description}</p>
     </div>
   );
 };
 
-// Login Component
-const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Logging in", { email, password });
-  };
-
+// ElegantShape for geometric hero
+function ElegantShape({
+  className,
+  delay = 0,
+  width = 400,
+  height = 100,
+  rotate = 0,
+  gradient = "from-white/[0.08]",
+}: {
+  className?: string;
+  delay?: number;
+  width?: number;
+  height?: number;
+  rotate?: number;
+  gradient?: string;
+}) {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12">
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Login</h2>
-        <div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter your password"
-            />
-          </div>
-          <button
-            onClick={handleSubmit}
-            className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors duration-300"
-          >
-            Sign In
-          </button>
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline font-medium">Sign up here</Link>
-          </p>
-        </div>
-      </div>
-    </div>
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: -150,
+        rotate: rotate - 15,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        rotate: rotate,
+      }}
+      transition={{
+        duration: 2.4,
+        delay,
+        ease: [0.23, 0.86, 0.39, 0.96],
+        opacity: { duration: 1.2 },
+      }}
+      className={"absolute " + (className || "")}
+    >
+      <motion.div
+        animate={{ y: [0, 15, 0] }}
+        transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        style={{ width, height }}
+        className="relative"
+      >
+        <div
+          className={
+            "absolute inset-0 rounded-full bg-gradient-to-r to-transparent " +
+            gradient +
+            " backdrop-blur-[2px] border-2 border-white/[0.10] shadow-[0_8px_32px_0_rgba(255,255,255,0.08)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.10),transparent_70%)]"
+          }
+        />
+      </motion.div>
+    </motion.div>
   );
-};
-
-// Signup Component
-const Signup: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Signing up", { email, password, name });
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12">
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign Up</h2>
-        <div>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter your full name"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter your password"
-            />
-          </div>
-          <button
-            onClick={handleSubmit}
-            className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors duration-300"
-          >
-            Sign Up
-          </button>
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Already have an account? <Link to="/login" className="text-blue-600 hover:underline font-medium">Sign in here</Link>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
+}
 
 // Homepage Component
 const Homepage: React.FC = () => {
-  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-  const heroImage = "/background.jpg"; // Reference image from public folder
-
   const features: Feature[] = [
     {
       icon: FileText,
@@ -199,35 +176,33 @@ const Homepage: React.FC = () => {
     }
   ];
 
-  // Handle image loading
-  useEffect(() => {
-    const img = new Image();
-    img.src = heroImage;
-    img.onload = () => setImageLoaded(true);
-  }, []);
+
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-black dark:bg-black transition-colors duration-500">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="border-b border-gray-900 bg-white/10 dark:bg-black/40 backdrop-blur-xl sticky top-0 z-40 shadow-lg">
+        <div className="container mx-auto px-4 py-2 flex items-center justify-between min-h-[48px]">
           <div className="flex items-center space-x-2">
-            <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center">
-              <Heart className="h-6 w-6 text-white" />
+            <div className="flex items-center justify-center shadow-md">
+              <img
+                src="/logo.svg"
+                alt="MediSync Logo"
+                className="w-16 h-16 md:w-20 md:h-20 drop-shadow-lg"
+              />
             </div>
-            <span className="text-2xl font-bold text-gray-900">HealthCare Records</span>
+            <span className="text-2xl font-bold text-gray-100 tracking-tight">MediSync</span>
           </div>
-          
           <div className="flex items-center space-x-4">
             <Link 
               to="/login"
-              className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+              className="text-gray-300 hover:text-white font-medium transition-colors"
             >
               Login
             </Link>
             <Link 
               to="/signup"
-              className="bg-gradient-to-r from-blue-600 to-blue-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-blue-700 transition-all duration-300 shadow-md"
+              className="bg-gradient-to-r from-gray-900 to-gray-700 text-white px-6 py-2 rounded-full hover:from-black hover:to-gray-800 transition-all duration-300 shadow-md font-semibold border border-gray-900"
             >
               Sign Up
             </Link>
@@ -235,84 +210,131 @@ const Homepage: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-blue-100" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                  Your Health Records,
-                  <span className="block bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent">Simplified & Secure</span>
-                </h1>
-                <p className="text-xl text-gray-600 max-w-lg">
-                  Take control of your healthcare with our comprehensive digital health record system. 
-                  Access, manage, and share your medical information securely.
-                </p>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  to="/signup"
-                  className="bg-gradient-to-r from-blue-600 to-blue-600 text-white group px-6 py-3 rounded-full hover:from-blue-700 hover:to-blue-700 transition-all duration-300 shadow-lg"
-                >
-                  Get Started
-                  <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <Link 
-                  to="/login"
-                  className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-full font-medium transition-colors duration-300"
-                >
-                  Login to Account
-                </Link>
-              </div>
-              
-              <div className="flex items-center space-x-8 text-sm text-gray-600">
-                <div className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5 text-blue-600" />
-                  <span>HIPAA Compliant</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-blue-600" />
-                  <span>24/7 Access</span>
-                </div>
-              </div>
+      {/* Hero Section - Geometric Gray Theme */}
+      <section className="relative min-h-[70vh] w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-black via-neutral-950 to-neutral-900">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/10 blur-3xl" />
+        {/* Geometric shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          <ElegantShape
+            delay={0.3}
+            width={600}
+            height={140}
+            rotate={12}
+            gradient="from-gray-400/[0.10]"
+            className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+          />
+          <ElegantShape
+            delay={0.5}
+            width={500}
+            height={120}
+            rotate={-15}
+            gradient="from-gray-500/[0.10]"
+            className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+          />
+          <ElegantShape
+            delay={0.4}
+            width={300}
+            height={80}
+            rotate={-8}
+            gradient="from-gray-300/[0.10]"
+            className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+          />
+          <ElegantShape
+            delay={0.6}
+            width={200}
+            height={60}
+            rotate={20}
+            gradient="from-gray-200/[0.10]"
+            className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+          />
+          <ElegantShape
+            delay={0.7}
+            width={150}
+            height={40}
+            rotate={-25}
+            gradient="from-gray-100/[0.10]"
+            className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+          />
+        </div>
+        <div className="relative z-10 container mx-auto px-4 md:px-6 flex flex-col items-center justify-center">
+          <div className="max-w-3xl mx-auto text-center">
+            <motion.div
+              custom={0}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.01] border border-white/[0.05] mb-8 md:mb-12"
+            >
+              <Circle className="h-2 w-2 fill-gray-500/80" />
+              <span className="text-sm text-gray-300 tracking-wide">
+                HealthCare Records
+              </span>
+            </motion.div>
+            <motion.div
+              custom={1}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-6 md:mb-8 tracking-tight">
+                <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-200">
+                  Your Health Records
+                </span>
+                <br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-white/80 to-gray-600 ">
+                  Simplified & Secure
+                </span>
+              </h1>
+            </motion.div>
+            <motion.div
+              custom={2}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.9, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
+                Take control of your healthcare with our comprehensive digital health record system. Access, manage, and share your medical information securely.
+              </p>
+            </motion.div>
+            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+              <YourButton as="link" to="/signup" className="group bg-gradient-to-r from-black to-gray-800 text-white border border-gray-900">
+                Get Started
+                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform inline-block align-middle" />
+              </YourButton>
+              <Link 
+                to="/login"
+                className="border-2 border-gray-900 text-gray-300 hover:bg-black/40 px-6 py-3 rounded-full font-medium transition-colors duration-300"
+              >
+                Login to Account
+              </Link>
             </div>
-            
-            <div className="relative">
-              <div className={`transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}>
-                <img 
-                  src={heroImage} 
-                  alt="Modern healthcare technology background"
-                  className="rounded-2xl shadow-2xl w-full h-auto object-cover border-4 border-white"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent rounded-2xl" />
+            <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 mt-6">
+              <div className="flex items-center space-x-2">
+                <Shield className="h-5 w-5 text-gray-500" />
+                <span>HIPAA Compliant</span>
               </div>
-              {!imageLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-2xl">
-                  <div className="animate-pulse bg-gray-300 h-full w-full rounded-2xl" />
-                </div>
-              )}
+              <div className="flex items-center space-x-2">
+                <Clock className="h-5 w-5 text-gray-500" />
+                <span>24/7 Access</span>
+              </div>
             </div>
           </div>
         </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#18181b] via-transparent to-[#18181b]/80 pointer-events-none" />
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-100">
+      <section className="py-20 bg-gradient-to-br from-neutral-950 to-black dark:from-neutral-950 dark:to-black">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-100 mb-4 drop-shadow-lg">
               Comprehensive Healthcare Management
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Our platform provides everything you need to manage your health records, 
               communicate with healthcare providers, and stay on top of your wellness journey.
             </p>
           </div>
-          
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <FeatureCard
@@ -327,66 +349,62 @@ const Homepage: React.FC = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-20">
+      <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-100 drop-shadow-lg">
                 Revolutionizing Healthcare Records
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-gray-400">
                 We believe that managing your health should be simple, secure, and accessible. 
                 Our digital health record system puts you in control of your medical information 
                 while ensuring the highest standards of privacy and security.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
-                  <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mt-0.5">
-                    <div className="h-2 w-2 rounded-full bg-blue-600" />
+                  <div className="h-6 w-6 rounded-full bg-blue-900 flex items-center justify-center mt-0.5">
+                    <div className="h-2 w-2 rounded-full bg-blue-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Unified Health Data</h3>
-                    <p className="text-gray-600">All your medical records in one secure place</p>
+                    <h3 className="font-semibold text-gray-100">Unified Health Data</h3>
+                    <p className="text-gray-400">All your medical records in one secure place</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mt-0.5">
-                    <div className="h-2 w-2 rounded-full bg-blue-600" />
+                  <div className="h-6 w-6 rounded-full bg-blue-900 flex items-center justify-center mt-0.5">
+                    <div className="h-2 w-2 rounded-full bg-blue-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Easy Sharing</h3>
-                    <p className="text-gray-600">Share records with healthcare providers instantly</p>
+                    <h3 className="font-semibold text-gray-100">Easy Sharing</h3>
+                    <p className="text-gray-400">Share records with healthcare providers instantly</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center mt-0.5">
-                    <div className="h-2 w-2 rounded-full bg-blue-600" />
+                  <div className="h-6 w-6 rounded-full bg-blue-900 flex items-center justify-center mt-0.5">
+                    <div className="h-2 w-2 rounded-full bg-blue-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Smart Insights</h3>
-                    <p className="text-gray-600">AI-powered health insights and recommendations</p>
+                    <h3 className="font-semibold text-gray-100">Smart Insights</h3>
+                    <p className="text-gray-400">AI-powered health insights and recommendations</p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <div className="bg-gradient-to-br from-blue-100 to-blue-100 rounded-2xl p-8 shadow-lg">
+            <div className="bg-gradient-to-br from-black to-neutral-900/80 rounded-2xl p-8 shadow-lg border border-gray-900/80 backdrop-blur-xl">
               <div className="space-y-6">
-                <h3 className="text-2xl font-bold text-gray-900">Ready to get started?</h3>
-                <p className="text-gray-600">
+                <h3 className="text-2xl font-bold text-gray-100">Ready to get started?</h3>
+                <p className="text-gray-400">
                   Join thousands of patients who trust us with their healthcare records.
                 </p>
-                <Link 
-                  to="/signup"
-                  className="w-full sm:w-72 md:w-80 lg:w-96 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-full hover:from-blue-700 hover:to-blue-700 transition-all duration-300 shadow-md"
-                >
+                <YourButton as="link" to="/signup" className="w-full sm:w-72 md:w-80 lg:w-96 bg-gradient-to-r from-black to-gray-800 text-white border border-gray-900">
                   Create Your Account
-                </Link>
-                <p className="text-center text-sm text-gray-600">
+                </YourButton>
+                <p className="text-center text-sm text-gray-400">
                   Already have an account?{" "}
                   <Link 
                     to="/login"
-                    className="text-blue-600 hover:underline font-medium"
+                    className="text-gray-300 hover:underline font-medium"
                   >
                     Sign in here
                   </Link>
@@ -398,18 +416,22 @@ const Homepage: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t py-12">
+      <footer className="bg-black/95 border-t border-gray-900/80 py-12 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between">
             <div className="flex items-center space-x-2 mb-4 sm:mb-0">
-              <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center">
-                <Heart className="h-6 w-6 text-white" />
+              <div className="flex items-center justify-center shadow-md">
+                <img
+                  src="/logo.svg"
+                  alt="MediSync Logo"
+                  className="w-12 h-12 md:w-14 md:h-14 drop-shadow-lg"
+                />
               </div>
-              <span className="text-2xl font-bold text-gray-900">HealthCare Records</span>
+              <span className="text-2xl font-bold text-gray-100 tracking-tight">MediSync</span>
             </div>
-            <p className="text-gray-600">
-              © 2025 HealthCare Records. Secure healthcare management.
-            </p>
+          <p className="text-gray-500">
+            © 2025 HealthCare Records. Secure healthcare management.
+          </p>
           </div>
         </div>
       </footer>
