@@ -1,5 +1,5 @@
 import express from 'express';
-import { signupUser, loginUser, resetPassword, forgetPassword, updateinformation,getinformation,refreshToken,refreshToken} from '../Controller/patientcontroller.js';
+import { signupUser, loginUser, resetPassword, forgetPassword, updateinformation,getinformation,refreshToken} from '../Controller/patientcontroller.js';
 import { authenticateToken } from '../Middleware/usermiddleware.js';
 const router = express.Router();
 router.post('/signup', signupUser);
@@ -8,6 +8,5 @@ router.post('/resetpassword', resetPassword);
 router.post('/updateinformation', updateinformation); 
 router.post('/refresh', refreshToken);  
 router.post('/login', loginUser);
-router.post("/refresh", refreshToken);
 router.get('/getinformation', authenticateToken,getinformation);
 export default router;
