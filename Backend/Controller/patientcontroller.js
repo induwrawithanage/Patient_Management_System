@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import User from '../Models/Patient.js';
 import nodemailer from 'nodemailer';
 dotenv.config();
+let refreshTokens = [];
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
@@ -80,6 +81,7 @@ export const loginUser = async (req, res) => {
       JWT_REFRESH_SECRET,
       { expiresIn: '7d' } // Long-lived refresh token
     );
+    refreshTokens.push(refreshToken);
 
     res.status(200).json({
       message: 'Login successful',
@@ -257,5 +259,43 @@ export const getinformation = async (req, res) => {
   res.json({
     message: 'User profile',
     user,
+  });
+};
+
+
+export const refreshToken = (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token required' });
+  }
+
+  if (!refreshTokens.includes(refreshToken)) {
+    return res.status(403).json({ message: 'Invalid refresh token' });
+  }
+
+  jwt.verify(refreshToken, JWT_REFRESH_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid or expired refresh token' });
+    }
+
+    const payload = {
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      userId: user.userId,
+      fullname: user.fullname,
+      bloodgroup: user.bloodgroup,
+      address: user.address,
+      national_id: user.national_id,
+      age: user.age
+    };
+
+    const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '150m' });
+
+    res.status(200).json({
+      message: 'Access token refreshed',
+      accessToken: newAccessToken,
+    });
   });
 };
