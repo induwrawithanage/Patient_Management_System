@@ -7,7 +7,8 @@ A full-stack application  with langchain and blockchain implement system to mana
 ## Project Structure
 
 - **Frontend**: React-based user interface  
-- **Backend**: Node.js/Express API server  
+- **Backend**: Node.js/Express API server
+- **contract**: Etherium Blockchain(solidity)
 
 ---
 
