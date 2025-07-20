@@ -9,4 +9,5 @@ router.post('/updateinformation', updateinformation);
 router.post('/refresh', refreshToken);  
 router.post('/login', loginUser);
 router.get('/getinformation', authenticateToken,getinformation);
+
 export default router;

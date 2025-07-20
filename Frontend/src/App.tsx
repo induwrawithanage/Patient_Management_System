@@ -9,6 +9,7 @@ import PatientProfilePage from './pages/PatientProfile'
 import Homepage from './pages/Homepage'
 import PatientProfile from './pages/PatientProfile';
 import SignupPatient from './pages/SignupPatient'
+import AddRecordForm from './pages/test';
 function App() {
 
 
@@ -16,6 +17,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/records" element={<AddRecordForm/>} />
+        {/* Define other routes here */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />

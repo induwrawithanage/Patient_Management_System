@@ -231,6 +231,7 @@ function Dashboard() {
     { label: 'Appointments', to: '/appointments' },
     { label: 'Reports', to: '/reports' },
     { label: 'Settings', to: '/settings' },
+    { label: 'Records', to: '/records' },
   ];
 
   return (

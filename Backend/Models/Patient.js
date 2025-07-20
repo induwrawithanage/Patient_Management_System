@@ -13,6 +13,20 @@ const patientSchema = new mongoose.Schema({
   age: { type: String, default: "undefined" },
   bloodgroup: { type: String, default: "undefined" },
   address: { type: String, default: "undefined" },
-});
+  blockchainAddress: {type: String},
+  recordHashes: [
+    {
+      blockchainTxHash: {
+        type: String,
+        default: "undefined"
+      },
+      timestamp: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
+}, { timestamps: true });
+
 
 export default mongoose.model('Patient', patientSchema);
