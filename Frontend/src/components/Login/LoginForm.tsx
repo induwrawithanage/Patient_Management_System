@@ -40,6 +40,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ navigateToDashboard, handleForget
       });
 
       console.log("Login success:", response.data);
+      localStorage.setItem("isDoctor",  response.data.user.role === 'doctor' ? "true" : "false");
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
       setErrors({ general: "✅ Login successful! Redirecting..." });

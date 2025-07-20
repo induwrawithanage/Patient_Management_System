@@ -9,7 +9,7 @@ import PatientProfilePage from './pages/PatientProfile'
 import Homepage from './pages/Homepage'
 import PatientProfile from './pages/PatientProfile';
 import SignupPatient from './pages/SignupPatient'
-import AddRecordForm from './pages/test';
+import AddRecordForm from './pages/record';
 function App() {
 
 
