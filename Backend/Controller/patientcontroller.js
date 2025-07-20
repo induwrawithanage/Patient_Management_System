@@ -11,7 +11,7 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 // Controller for user signup
 export const signupUser = async (req, res) => {
-  const { fullname, email, phone, password } = req.body;
+  const { fullname, email, phone, password, national_id, age, bloodgroup, address } = req.body;
 
   // Validate required fields
   if (!fullname || !email || !phone || !password) {
@@ -35,6 +35,10 @@ export const signupUser = async (req, res) => {
       phone,
       password: hashedPassword,
       role: 'patient', // Default role
+      national_id: national_id || undefined,
+      age: age || undefined,
+      bloodgroup: bloodgroup || undefined,
+      address: address || undefined,
     });
 
     // Save the user to the database
@@ -70,17 +74,19 @@ export const loginUser = async (req, res) => {
     }
 
     // Generate JWT tokens
-    const accessToken = jwt.sign(
-      { email: user.email,email: user.email,phone: user.phone,role: user.role,userId: user._id,fullname: user.fullname,bloodgroup: user.bloodgroup,address: user.address,national_id: user.national_id,age: user.age},
-      JWT_SECRET,
-      { expiresIn: '1d' } // Short-lived access token
-    );
-
-    const refreshToken = jwt.sign(
-      { email: user.email,email: user.email,phone: user.phone,role: user.role,userId: user._id,fullname: user.fullname,bloodgroup: user.bloodgroup,address: user.address,national_id: user.national_id,age: user.age},
-      JWT_REFRESH_SECRET,
-      { expiresIn: '7d' } // Long-lived refresh token
-    );
+    const payload = {
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      userId: user._id,
+      fullname: user.fullname,
+      bloodgroup: user.bloodgroup,
+      address: user.address,
+      national_id: user.national_id,
+      age: user.age
+    };
+    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
+    const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '7d' });
     refreshTokens.push(refreshToken);
 
     res.status(200).json({
@@ -217,10 +223,10 @@ export const loginUser = async (req, res) => {
 
 
 export const updateinformation = async (req, res) => {
-  const { fullname, email, phone,national_id,age,bloodgroup,adress } = req.body;
+  const { fullname, email, phone, national_id, age, bloodgroup, address } = req.body;
 
   // Validate required fields
-  if (!fullname || !email || !phone || !national_id || !age || !bloodgroup || !adress) {
+  if (!fullname || !email || !phone || !national_id || !age || !bloodgroup || !address) {
     return res.status(400).json({ message: 'Full name, email, phone, national ID, age, blood group, and address are required' });
   }
 
@@ -236,11 +242,10 @@ export const updateinformation = async (req, res) => {
     user.fullname = fullname;
     user.phone = phone;
     user.national_id = national_id;
-    user.hospital = hospital;
     user.email = email; // Update email if provided
     user.age = age;
     user.bloodgroup = bloodgroup;
-    user.address = adress;
+    user.address = address;
 
     // Save the updated user
     await user.save();
