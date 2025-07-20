@@ -16,7 +16,7 @@ A full-stack application  with langchain and blockchain implement system to mana
 - Node.js (v14 or higher recommended)  
 - npm (comes bundled with Node.js)  
 - A running database (MongoDB) configured in backend `.env`  
-
+- Browser extention for Metamask for blockchain transactions
 ---
 
 ## Setup Instructions
