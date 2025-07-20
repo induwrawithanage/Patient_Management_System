@@ -10,12 +10,15 @@ import Homepage from './pages/Homepage'
 import PatientProfile from './pages/PatientProfile';
 import SignupPatient from './pages/SignupPatient'
 import AddRecordForm from './pages/record';
+import Appointment from './pages/Appointment';
+import ReportWrapper from './pages/reports'
 function App() {
 
 
   return (
     <Router>
       <Routes>
+        
         <Route path="/" element={<Homepage />} />
         <Route path="/records" element={<AddRecordForm/>} />
         {/* Define other routes here */}
@@ -29,6 +32,10 @@ function App() {
         <Route path="/patient-profile" element={<PatientProfile />} />
         <Route path="/patient-profile/:patientId" element={<PatientProfile />} />
         <Route path="/signup-patient" element={<SignupPatient />} />
+        <Route path="/appointments" element={<Appointment />} />
+        <Route path="/reports" element={<ReportWrapper />} />
+        {/* Add more routes as needed */}
+        {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* Add more routes as needed */}
         {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* Add more routes as needed */}
