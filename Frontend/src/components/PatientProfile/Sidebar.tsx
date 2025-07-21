@@ -25,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, userRole }) => {
     { icon: Calendar, label: 'Appointments', active: false },
     { icon: FileText, label: 'Reports', active: false },
     { icon: Settings, label: 'Settings', active: false },
+   
   ];
 
   return (

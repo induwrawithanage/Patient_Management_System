@@ -11,7 +11,7 @@ let refreshTokens = [];
 
 // Controller for user signup
 export const signupUser = async (req, res) => {
-  const { fullname, email, phone, password } = req.body;
+  const { fullname, email, phone, password, degree, specialization, description, national_id, hospital } = req.body;
 
   // Validate required fields
   if (!fullname || !email || !phone || !password) {
@@ -29,12 +29,18 @@ export const signupUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the new user
+
     const user = new User({
       fullname,
       email,
       phone,
       password: hashedPassword,
       role: 'doctor', // Default role
+      degree: degree || undefined,
+      specialization: specialization || undefined,
+      description: description || undefined,
+      national_id: national_id || undefined,
+      hospital: hospital || undefined,
     });
 
     // Save the user to the database
@@ -69,18 +75,22 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Generate JWT tokens
-    const accessToken = jwt.sign(
-      { email: user.email, role: user.role,userId: user._id,fullname: user.fullname,email: user.email,phone: user.phone,role: user.role ,hospital: user.hospital,national_id: user.national_id},
-      JWT_SECRET,
-      { expiresIn: '1d' } // Short-lived access token
-    );
 
-    const refreshToken = jwt.sign(
-      { email: user.email, role: user.role,userId: user._id,fullname: user.fullname,email: user.email,phone: user.phone,role: user.role ,hospital: user.hospital,national_id: user.national_id},
-      JWT_REFRESH_SECRET,
-      { expiresIn: '7d' } // Long-lived refresh token
-    );
+    // Generate JWT tokens (include new fields)
+    const payload = {
+      email: user.email,
+      role: user.role,
+      userId: user._id,
+      fullname: user.fullname,
+      phone: user.phone,
+      hospital: user.hospital,
+      national_id: user.national_id,
+      degree: user.degree,
+      specialization: user.specialization,
+      description: user.description,
+    };
+    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
+    const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
     res.status(200).json({
       message: 'Login successful',
@@ -215,8 +225,9 @@ export const loginUser = async (req, res) => {
 };
 
 
+
 export const updateinformation = async (req, res) => {
-  const { fullname, email, phone,national_id,hospital } = req.body;
+  const { fullname, email, phone, national_id, hospital, degree, specialization, description } = req.body;
 
   // Validate required fields
   if (!fullname || !email || !phone || !national_id || !hospital) {
@@ -231,17 +242,29 @@ export const updateinformation = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+
     // Update user information
     user.fullname = fullname;
     user.phone = phone;
     user.national_id = national_id;
     user.hospital = hospital;
     user.email = email; // Update email if provided
+    if (degree !== undefined) user.degree = degree;
+    if (specialization !== undefined) user.specialization = specialization;
+    if (description !== undefined) user.description = description;
 
     // Save the updated user
     await user.save();
 
-    res.status(200).json({ message: 'User information updated successfully', status: 'ok' });
+    // Fetch the latest user from DB (to ensure all fields are up to date)
+    const updatedUser = await User.findOne({ email });
+
+    res.status(200).json({
+      message: 'User information updated successfully',
+      status: 'ok',
+      success: true,
+      user: updatedUser,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error updating user information' });
@@ -252,7 +275,7 @@ export const updateinformation = async (req, res) => {
 export const getinformation = async (req, res) => {
   // Middleware should have already authenticated the user
   console.log(req.user);
-  const user = req.user; // this contains { id, email, role } as you set in sign()
+  const user = req.user; // this contains { id, email, role, ... }
   res.json({
     message: 'User profile',
     user,
@@ -284,7 +307,9 @@ export const refreshToken = (req, res) => {
       fullname: user.fullname,
       hospital: user.hospital,
       national_id: user.national_id,
-      
+      degree: user.degree,
+      specialization: user.specialization,
+      description: user.description,
     };
 
     const newAccessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '150m' });

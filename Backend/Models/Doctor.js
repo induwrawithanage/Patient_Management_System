@@ -6,7 +6,10 @@ const DoctorSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  role: { type: String,default:'Doctor'}, // Default role for doctors
+  role: { type: String,default:'Doctor'},
+  degree: { type: String, default: "undefined" },
+  specialization: { type: String, default: "undefined" },
+  description: { type: String, default: "undefined" },
   resetPasswordToken:{type: String, default:"undefined"},
   resetPasswordExpires:{type: String, default:"undefined"},
   national_id: { type: String, default: "undefined" },
