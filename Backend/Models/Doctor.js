@@ -14,6 +14,7 @@ const DoctorSchema = new mongoose.Schema({
   resetPasswordExpires:{type: String, default:"undefined"},
   national_id: { type: String, default: "undefined" },
   hospital: { type: String, default: "undefined" },
+  connected_patient:{type: Array, default: []},
 });
 
 export default mongoose.model('Doctor', DoctorSchema);
