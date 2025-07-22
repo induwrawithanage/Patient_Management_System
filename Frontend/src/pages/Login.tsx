@@ -86,7 +86,7 @@ const Login = () => {
         });
         setErrors({ general: "✅ Login successful! Redirecting..." });
          setTimeout(() => {
-          navigate("/dashboard", { replace: true });
+          navigate("/new-patient", { replace: true });
         }, 1500);
         // Success animation before redirect
       } else {
@@ -104,7 +104,7 @@ const Login = () => {
 
   const navigateToDashboard = () => {
   
-    navigate("/dashboard", { replace: true });
+    navigate("/new-patient", { replace: true });
   };
 
   const handleForgetPassword = () => {
