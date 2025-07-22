@@ -5,6 +5,7 @@ import User from '../Models/Patient.js';
 import Parameters from '../Models/parameterss.js';
 import nodemailer from 'nodemailer';
 import Medical from "../Models/MedicalHistory.js";
+import Doctor from '../Models/Doctor.js';
 dotenv.config();
 let refreshTokens = [];
 
@@ -270,9 +271,12 @@ export const getinformation = async (req, res) => {
 
     // Find parameter details for this patient
     const parameters = await Parameters.findOne({ patient_id: user.userId }).lean();
-
+    
+    
     // Find medical records for this patient
     const records = await Medical.find({ patient_id: user.userId }).lean();
+
+    const Healthcare=await Doctor.findOne({ patient_id: records.doctor_id }).select("-password -_id").lean();
 
     console.log("Fetched Records:", records);
 
@@ -287,6 +291,7 @@ export const getinformation = async (req, res) => {
       user,
       parameters,
       records, // will be an array [] if no records found
+      Healthcare,
     });
   } catch (error) {
     console.error("Error fetching user information:", error);
