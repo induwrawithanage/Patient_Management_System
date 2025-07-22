@@ -2,7 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import User from '../Models/Patient.js';
+import Parameters from '../Models/parameterss.js';
 import nodemailer from 'nodemailer';
+import parameterss from '../Models/parameterss.js';
 dotenv.config();
 let refreshTokens = [];
 
@@ -258,15 +260,33 @@ export const updateinformation = async (req, res) => {
 }
 
 export const getinformation = async (req, res) => {
-  // Middleware should have already authenticated the user
-  console.log(req.user);
-  const user = req.user; // this contains { id, email, role } as you set in sign()
-  res.json({
-    message: 'User profile',
-    user,
-  });
-};
+  try {
+    // Middleware should have already authenticated the user
+    console.log(req.user);
+    const user = req.user; // contains { userId, email, role, ... }
 
+    if (!user || !user.userId) {
+      return res.status(400).json({ message: "Invalid user data" });
+    }
+
+    // Find parameter details for this patient
+    const parameters = await Parameters.findOne({ patient_id: user.userId }).lean();
+
+    if (!parameters) {
+      return res.status(404).json({ message: "No parameter details found for this user" });
+    }
+
+    // Return user profile + parameter details
+    res.json({
+      message: "User profile with parameter details",
+      user,
+      parameters,
+    });
+  } catch (error) {
+    console.error("Error fetching user information:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 export const refreshToken = (req, res) => {
   const { refreshToken } = req.body;

@@ -1,5 +1,5 @@
 import express from 'express';
-import { signupUser, loginUser, resetPassword, forgetPassword, updateinformation, getinformation, refreshToken } from '../Controller/patientcontroller.js';
+import { signupUser, loginUser,resetPassword,forgetPassword, updateinformation, getinformation, refreshToken } from '../Controller/patientcontroller.js';
 import { authenticateToken } from '../Middleware/usermiddleware.js';
 const router = express.Router();
 router.post('/signup', signupUser);
