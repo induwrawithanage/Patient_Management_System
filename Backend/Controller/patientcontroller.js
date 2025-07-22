@@ -378,3 +378,34 @@ export const addMedicalRecord = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+export const updatepatientprofile = async (req, res) => {
+  const { fullname, email, phone, national_id, age, bloodgroup, address } = req.body;
+
+  try {
+    console.log(req.user);
+    // Find the user by ID
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user information
+    user.fullname = fullname;
+    user.phone = phone;
+    user.national_id = national_id;
+    user.email = email; // Update email if provided
+    user.age = age;
+    user.bloodgroup = bloodgroup;
+    user.address = address;
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ message: 'User profile updated successfully', status: 'ok' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error updating user profile' });
+  }
+}
