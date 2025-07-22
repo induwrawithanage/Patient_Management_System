@@ -6,6 +6,7 @@ const parametersSchema = new mongoose.Schema({
   note:{type:String,default:"undefined"},
   special_note:{type:String,default:"undefined"},
   treatment:{type:String,default:"undefined"},
+  patient_id:{type: String, default:"undefined"},
 })
 
 export default mongoose.model("Record", parametersSchema);

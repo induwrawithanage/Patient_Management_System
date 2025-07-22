@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import User from '../Models/Patient.js';
 import Parameters from '../Models/parameterss.js';
 import nodemailer from 'nodemailer';
-import parameterss from '../Models/parameterss.js';
+import Medical from "../Models/MedicalHistory.js";
 dotenv.config();
 let refreshTokens = [];
 
@@ -261,9 +261,8 @@ export const updateinformation = async (req, res) => {
 
 export const getinformation = async (req, res) => {
   try {
-    // Middleware should have already authenticated the user
     console.log(req.user);
-    const user = req.user; // contains { userId, email, role, ... }
+    const user = req.user;
 
     if (!user || !user.userId) {
       return res.status(400).json({ message: "Invalid user data" });
@@ -272,21 +271,29 @@ export const getinformation = async (req, res) => {
     // Find parameter details for this patient
     const parameters = await Parameters.findOne({ patient_id: user.userId }).lean();
 
+    // Find medical records for this patient
+    const records = await Medical.find({ patient_id: user.userId }).lean();
+
+    console.log("Fetched Records:", records);
+
+    // If no parameters, return 404
     if (!parameters) {
       return res.status(404).json({ message: "No parameter details found for this user" });
     }
 
-    // Return user profile + parameter details
+    // Return user profile, parameter details, and medical records
     res.json({
-      message: "User profile with parameter details",
+      message: "User profile with parameter details and medical records",
       user,
       parameters,
+      records, // will be an array [] if no records found
     });
   } catch (error) {
     console.error("Error fetching user information:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 export const refreshToken = (req, res) => {
   const { refreshToken } = req.body;
@@ -323,4 +330,46 @@ export const refreshToken = (req, res) => {
       accessToken: newAccessToken,
     });
   });
+};
+
+
+export const addMedicalRecord = async (req, res) => {
+  try {
+    const {
+      identifications,
+      prescriptions,
+      notes,
+      date,
+      riskLevel,
+      patient_id,
+      doctor_id,
+    } = req.body;
+
+    // Basic validation
+    if (!patient_id || !doctor_id) {
+      return res.status(400).json({ message: "patient_id and doctor_id are required" });
+    }
+
+    // Create new medical record
+    const newRecord = new Medical({
+      identifications,
+      prescriptions,
+      notes,
+      date,
+      riskLevel,
+      patient_id,
+      doctor_id,
+    });
+
+    // Save to DB
+    const savedRecord = await newRecord.save();
+
+    res.status(201).json({
+      message: "Medical record added successfully",
+      record: savedRecord,
+    });
+  } catch (error) {
+    console.error("Error adding medical record:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 };
