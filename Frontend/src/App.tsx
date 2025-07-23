@@ -15,6 +15,7 @@ import NewPatient from './pages/NewPatient';
 import Dashboardnew from './pages/Dashboard'
 import MedicalRecordDetail from './components/NewPatient/MedicalRecordDetail'
 import ReportWrapper from './pages/reports'
+import AddPatient from './pages/AddPatient'
 function App() {
 
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/reports" element={<ReportWrapper />} />
         <Route path="/new-patient" element={<NewPatient />} />
         <Route path="/medical-record/:id" element={<MedicalRecordDetail />} />
+        <Route path="/addpatient" element={<AddPatient />} />
         {/* Add more routes as needed */}
         {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* Add more routes as needed */}

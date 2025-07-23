@@ -232,6 +232,7 @@ function Dashboard() {
     { label: 'Reports', to: '/reports' },
     { label: 'Settings', to: '/settings' },
     { label: 'Records', to: '/records' },
+    { label: 'AddPatient', to: '/addpatient' }
   ];
 
   return (
