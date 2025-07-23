@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog";
-import { UserPlus, Trash2, Phone, Mail, Stethoscope, Heart, Search, Eye, Users } from "lucide-react"; // Removed Nurse as it is not exported
+import { UserPlus, Trash2, Phone, Mail, Stethoscope, Heart, Search, Eye, Users } from "lucide-react";
 import { useToast } from "../../hooks/use-toast";
+import axios from "axios";
 
 interface HealthcareProvider {
   id: string;
@@ -21,44 +22,7 @@ interface HealthcareProvider {
 const HealthcareConnections = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
-  const [connections, setConnections] = useState<HealthcareProvider[]>([
-    {
-      id: "1",
-      name: "Dr. Sarah Johnson",
-      type: "doctor",
-      specialty: "Cardiology",
-      hospital: "National Hospital, Colombo",
-      phone: "+94 11 123 4567",
-      email: "dr.johnson@hospital.com"
-    },
-    {
-      id: "2",
-      name: "Nurse Emily Davis",
-      type: "nurse",
-      hospital: "City Medical Center, Kandy",
-      phone: "+94 11 234 5678",
-      email: "e.davis@medical.com"
-    },
-    {
-      id: "3",
-      name: "Dr. Rohan Perera",
-      type: "specialist",
-      specialty: "Pediatrics",
-      hospital: "Lanka Hospitals, Colombo",
-      phone: "+94 77 987 6543",
-      email: "dr.perera@lankahospitals.lk"
-    },
-    {
-      id: "4",
-      name: "Mr. Aloka Fernando",
-      type: "therapist",
-      specialty: "Physical Therapy",
-      hospital: "Healthy Steps Clinic, Galle",
-      phone: "+94 71 345 6789",
-      email: "aloka.therapy@clinic.com"
-    }
-  ]);
-
+  const [connections, setConnections] = useState<HealthcareProvider[]>([]);
   const [newConnection, setNewConnection] = useState({
     name: "",
     type: "doctor" as const,
@@ -67,15 +31,74 @@ const HealthcareConnections = () => {
     phone: "",
     email: ""
   });
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch healthcare provider from API
+  useEffect(() => {
+    const fetchHealthcareProvider = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          console.error("Access token not found.");
+          toast({
+            title: "Authentication Error",
+            description: "Please log in to access healthcare provider information.",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        const response = await axios.get("http://localhost:3000/patient/getinformation", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const healthcareData = response.data.Healthcare;
+        if (healthcareData) {
+          const mappedProvider: HealthcareProvider = {
+            id: Date.now().toString(), // Generate a unique ID (or use a field from API if available)
+            name: healthcareData.fullname,
+            type: healthcareData.role as 'doctor' | 'nurse' | 'specialist' | 'therapist', // Map role to type
+            specialty: healthcareData.specialty || "General Medicine", // Fallback
+            hospital: healthcareData.hospital || "Unknown Hospital", // Fallback
+            phone: healthcareData.phone,
+            email: healthcareData.email
+          };
+
+          // Merge with existing connections or replace
+          setConnections(prev => {
+            // Avoid duplicates by checking if the provider already exists (e.g., by email)
+            const exists = prev.some(c => c.email === mappedProvider.email);
+            if (!exists) {
+              return [...prev, mappedProvider];
+            }
+            return prev;
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch healthcare provider:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch healthcare provider information.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHealthcareProvider();
+  }, []);
 
   const getTypeIcon = (type: HealthcareProvider['type']) => {
     switch (type) {
       case 'doctor':
         return <Stethoscope className="h-4 w-4 text-blue-600" />;
       case 'nurse':
-        return <Users className="h-4 w-4 text-green-600" />; // Replaced Nurse with Users icon
+        return <Users className="h-4 w-4 text-green-600" />;
       case 'specialist':
         return <Heart className="h-4 w-4 text-red-600" />;
       case 'therapist':
@@ -264,20 +287,11 @@ const HealthcareConnections = () => {
           </Dialog>
         </CardHeader>
         <CardContent className="p-6 sm:p-8">
-          {/* Search Panel */}
-          <div className="mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <Input
-                placeholder="Search by name, type, specialty, or hospital..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              />
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-gray-600">Loading healthcare connections...</p>
             </div>
-          </div>
-          
-          {filteredConnections.length === 0 ? (
+          ) : filteredConnections.length === 0 ? (
             <div className="text-center py-12 text-gray-500 bg-gray-50 rounded-lg border border-gray-100">
               <Stethoscope className="h-16 w-16 mx-auto mb-4 opacity-40 text-gray-400" />
               <p className="text-lg font-semibold mb-2">{searchTerm ? 'No connections found matching your search.' : 'No healthcare connections yet.'}</p>
