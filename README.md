@@ -50,6 +50,7 @@ A full-stack application  with langchain and blockchain implement system to mana
    JWT_REFRESH_SECRET='your refresh number'
    Emailpassword="email secret"
    Email="idelaize email or like that"
+   GOOGLE_API_KEY="google api key"
     ```
 
   
