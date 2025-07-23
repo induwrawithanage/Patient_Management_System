@@ -32,9 +32,18 @@ const NewPatient = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
-      <DashboardNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      {/* <DashboardNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} /> */}
       {/* Main Content with glassmorphism */}
+      
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-black/40 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl text-white">
+               <div className="flex items-center space-x-2">
+        <img
+          src="/logo.svg"
+          alt="MediSync Logo"
+          className="w-12 h-12 md:w-14 md:h-14 drop-shadow-lg"
+        />
+        <span className="text-2xl font-bold text-gray-100 tracking-tight">MediSync</span>
+      </div>
         <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
         <div className="mt-6">
           {renderContent()}
