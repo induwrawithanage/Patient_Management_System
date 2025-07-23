@@ -58,7 +58,7 @@ const PatientProfile: React.FC<PatientProfileProps> = ({ patientId }) => {
             <button className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all font-medium">Appointments</button>
             <button className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all font-medium">Reports</button>
             <button className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all font-medium">Settings</button>
-             <button className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all font-medium">Records</button>
+            <button className="px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all font-medium">Records</button>
           </nav>
         </div>
         {/* Mobile dropdown menu */}

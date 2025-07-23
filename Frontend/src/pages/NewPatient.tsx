@@ -5,6 +5,7 @@ import MedicalHistory from "../components/NewPatient/MedicalHistory";
 import HealthcareConnections from "../components/NewPatient/HealthcareConnections";
 import Analytics from "../components/NewPatient/Analytics";
 import Messaging from "../components/NewPatient/Messaging";
+import Records from "./record";
 import { Heart, Shield, MessageCircle } from "lucide-react";
 
 const NewPatient = () => {
@@ -22,6 +23,8 @@ const NewPatient = () => {
         return <Analytics />;
       case 'messaging':
         return <Messaging />;
+      case 'records':
+        return <Records />;
       default:
         return <PatientProfile />;
     }

@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ForgetPassword from './pages/FogetPassword'
 import ResetPassword from './pages/ResetPassword'
-import Dashboard from './pages/Dashboard'
+// import Dashboard from './pages/Dashboard'
 import PatientProfilePage from './pages/PatientProfile'
 import Homepage from './pages/Homepage'
 import PatientProfile from './pages/PatientProfile';
@@ -12,10 +12,11 @@ import SignupPatient from './pages/SignupPatient'
 import AddRecordForm from './pages/record';
 import Appointment from './pages/Appointment';
 import NewPatient from './pages/NewPatient';
-import Dashboardnew from './pages/Dashboard'
-import MedicalRecordDetail from './components/NewPatient/MedicalRecordDetail'
-import ReportWrapper from './pages/reports'
-import AddPatient from './pages/AddPatient'
+import Dashboardnew from './pages/Dashboardnew';
+import MedicalRecordDetail from './components/NewPatient/MedicalRecordDetail';
+import ReportWrapper from './pages/reports';
+import AddPatient from './pages/AddPatient';
+
 function App() {
 
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../components/ui/button";
-import { User, FileText, Users, Heart, TrendingUp, MessageCircle } from "lucide-react";
+import { User, FileText, Users, Heart, TrendingUp, MessageCircle,FileBarChart } from "lucide-react";
 
 interface NavigationProps {
   activeTab: string;
@@ -13,7 +13,8 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
     { id: 'history', label: 'Medical History', icon: FileText },
     { id: 'connections', label: 'Healthcare Connections', icon: Users },
     { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-    { id: 'messaging', label: 'Chat', icon: MessageCircle }
+    { id: 'messaging', label: 'Chat', icon: MessageCircle },
+    { id: 'records', label: 'Records', icon: FileBarChart  }
   ];
 
   return (

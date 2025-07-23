@@ -258,6 +258,7 @@ import { Badge } from "../../components/ui/badge";
 import { Edit, Save, X, User, Heart, MapPin, Phone, Mail } from "lucide-react";
 import { useToast } from "../../hooks/use-toast";
 
+
 interface PatientData {
   name: string;
   nic: string;
