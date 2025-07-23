@@ -115,42 +115,42 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg mb-8 p-6">
+        <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 mb-8 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">HealthCare Appointments</h1>
-              <p className="text-gray-600">Book and manage your medical appointments</p>
+              <h1 className="text-3xl font-bold text-white mb-2">HealthCare Appointments</h1>
+              <p className="text-white">Book and manage your medical appointments</p>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <Calendar className="h-8 w-8 text-blue-600" />
+              <div className="bg-cyan-900/40 p-3 rounded-full">
+                <Calendar className="h-8 w-8 text-cyan-400" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg mb-8">
-          <div className="flex border-b border-gray-200">
+        <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 mb-8">
+          <div className="flex border-b border-cyan-900/30">
             <button
               onClick={() => setActiveTab('book')}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
+              className={`flex-1 py-4 px-6 text-center font-medium transition-colors rounded-t-2xl ${
                 activeTab === 'book'
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'text-cyan-300 border-b-2 border-cyan-400 bg-black/30'
+                  : 'text-cyan-500 hover:text-cyan-300'
               }`}
             >
               Book Appointment
             </button>
             <button
               onClick={() => setActiveTab('appointments')}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
+              className={`flex-1 py-4 px-6 text-center font-medium transition-colors rounded-t-2xl ${
                 activeTab === 'appointments'
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'text-cyan-300 border-b-2 border-cyan-400 bg-black/30'
+                  : 'text-cyan-500 hover:text-cyan-300'
               }`}
             >
               My Appointments
@@ -161,24 +161,24 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
         {activeTab === 'book' && (
           <div className="space-y-8">
             {/* Search and Filter */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <Search className="absolute left-3 top-3 h-5 w-5 text-cyan-400" />
                   <input
                     type="text"
                     placeholder="Search doctors or specialties..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-4 py-3 border border-cyan-700 bg-black/30 text-cyan-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 placeholder-cyan-400"
                   />
                 </div>
                 <div className="relative">
-                  <Filter className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <Filter className="absolute left-3 top-3 h-5 w-5 text-cyan-400" />
                   <select
                     value={filterSpecialty}
                     onChange={(e) => setFilterSpecialty(e.target.value)}
-                    className="pl-10 pr-8 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="pl-10 pr-8 py-3 border border-cyan-700 bg-black/30 text-cyan-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                   >
                     {specialties.map(specialty => (
                       <option key={specialty} value={specialty}>
@@ -195,8 +195,8 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
               {filteredDoctors.map(doctor => (
                 <div
                   key={doctor.id}
-                  className={`bg-white rounded-2xl shadow-lg p-6 cursor-pointer transition-all hover:shadow-xl transform hover:-translate-y-1 ${
-                    selectedDoctor?.id === doctor.id ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                  className={`bg-black/40 backdrop-blur-lg rounded-2xl shadow-lg border border-white/20 p-6 cursor-pointer transition-all hover:shadow-xl transform hover:-translate-y-1 ${
+                    selectedDoctor?.id === doctor.id ? 'ring-2 ring-cyan-400 bg-cyan-900/20' : ''
                   }`}
                   onClick={() => setSelectedDoctor(doctor)}
                 >
@@ -207,30 +207,27 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
                       className="w-16 h-16 rounded-full object-cover mr-4"
                     />
                     <div>
-                      <h3 className="font-semibold text-lg text-gray-800">{doctor.name}</h3>
-                      <p className="text-blue-600 font-medium">{doctor.specialty}</p>
+                      <h3 className="font-semibold text-lg text-white">{doctor.name}</h3>
+                      <p className="text-white font-medium">{doctor.specialty}</p>
                     </div>
                   </div>
                   
                   <div className="space-y-3">
-                    <div className="flex items-center text-gray-600">
+                    <div className="flex items-center text-white">
                       <Star className="h-4 w-4 text-yellow-400 mr-2" />
                       <span>{doctor.rating} • {doctor.experience}</span>
                     </div>
-                    
-                    <div className="flex items-center text-gray-600">
+                    <div className="flex items-center text-white">
                       <MapPin className="h-4 w-4 mr-2" />
                       <span className="text-sm">{doctor.location}</span>
                     </div>
-                    
-                    <div className="flex items-center text-gray-600">
+                    <div className="flex items-center text-white">
                       <Phone className="h-4 w-4 mr-2" />
                       <span className="text-sm">{doctor.phone}</span>
                     </div>
-                    
-                    <div className="pt-2 border-t border-gray-200">
-                      <span className="text-lg font-semibold text-green-600">{doctor.consultationFee}</span>
-                      <span className="text-gray-500 text-sm ml-1">consultation</span>
+                    <div className="pt-2 border-t border-cyan-900/30">
+                      <span className="text-lg font-semibold text-white">{doctor.consultationFee}</span>
+                      <span className="text-white text-sm ml-1">consultation</span>
                     </div>
                   </div>
                 </div>
@@ -239,14 +236,14 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
 
             {/* Appointment Booking */}
             {selectedDoctor && (
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-800 mb-6">
+              <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
+                <h3 className="text-xl font-semibold text-white mb-6">
                   Book Appointment with {selectedDoctor.name}
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-white mb-2">
                       Select Date
                     </label>
                     <input
@@ -254,18 +251,18 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
                       min={new Date().toISOString().split('T')[0]}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-cyan-700 bg-black/30 text-cyan-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-white mb-2">
                       Select Time
                     </label>
                     <select
                       value={selectedTime}
                       onChange={(e) => setSelectedTime(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-cyan-700 bg-black/30 text-cyan-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                     >
                       <option value="">Choose time slot</option>
                       {selectedDoctor.availability.map(time => (
@@ -279,7 +276,7 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
                   <button
                     onClick={handleBookAppointment}
                     disabled={!selectedDate || !selectedTime}
-                    className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex-1 bg-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow"
                   >
                     Book Appointment
                   </button>
@@ -289,7 +286,7 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
                       setSelectedDate('');
                       setSelectedTime('');
                     }}
-                    className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="px-6 py-3 border border-cyan-700 text-cyan-200 rounded-lg font-medium hover:bg-cyan-900/30 transition-colors"
                   >
                     Cancel
                   </button>
@@ -300,12 +297,12 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
         )}
 
         {activeTab === 'appointments' && (
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-black/40 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-gray-800">My Appointments</h3>
+              <h3 className="text-xl font-semibold text-white">My Appointments</h3>
               <button
                 onClick={() => setActiveTab('book')}
-                className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="flex items-center bg-cyan-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-cyan-700 transition-colors"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 New Appointment
@@ -316,34 +313,33 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
               {myAppointments.map(appointment => (
                 <div
                   key={appointment.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  className="border border-cyan-900/30 bg-black/30 rounded-lg p-4 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="bg-blue-100 p-3 rounded-full mr-4">
-                        <User className="h-6 w-6 text-blue-600" />
+                      <div className="bg-cyan-900/40 p-3 rounded-full mr-4">
+                        <User className="h-6 w-6 text-cyan-400" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-800">{appointment.doctor}</h4>
-                        <p className="text-blue-600 text-sm">{appointment.specialty}</p>
-                        <p className="text-gray-600 text-sm">{appointment.type}</p>
+                        <h4 className="font-semibold text-white">{appointment.doctor}</h4>
+                        <p className="text-white text-sm">{appointment.specialty}</p>
+                        <p className="text-white text-sm">{appointment.type}</p>
                       </div>
                     </div>
-                    
                     <div className="text-right">
-                      <div className="flex items-center text-gray-600 mb-1">
+                      <div className="flex items-center text-white mb-1">
                         <Calendar className="h-4 w-4 mr-1" />
                         <span className="text-sm">{appointment.date}</span>
                       </div>
-                      <div className="flex items-center text-gray-600 mb-2">
+                      <div className="flex items-center text-white mb-2">
                         <Clock className="h-4 w-4 mr-1" />
                         <span className="text-sm">{appointment.time}</span>
                       </div>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
                           appointment.status === 'confirmed'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                            ? 'bg-emerald-900/40 text-emerald-300'
+                            : 'bg-yellow-900/40 text-yellow-300'
                         }`}
                       >
                         {appointment.status}
@@ -356,11 +352,11 @@ import { Calendar, Clock, User, MapPin, Phone, Mail, Star, Filter, Search, Plus 
             
             {myAppointments.length === 0 && (
               <div className="text-center py-8">
-                <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No appointments scheduled</p>
+                <Calendar className="h-16 w-16 text-cyan-700 mx-auto mb-4" />
+                <p className="text-white">No appointments scheduled</p>
                 <button
                   onClick={() => setActiveTab('book')}
-                  className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  className="mt-4 bg-cyan-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-cyan-700 transition-colors"
                 >
                   Book Your First Appointment
                 </button>

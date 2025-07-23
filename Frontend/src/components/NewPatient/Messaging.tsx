@@ -46,7 +46,7 @@ const Messaging = () => {
     setTimeout(() => {
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: getBotResponse(userMessage.content), // Pass userMessage.content to getBotResponse
+        content: getBotResponse(userMessage.content),
         sender: 'bot',
         timestamp: new Date()
       };
@@ -108,11 +108,11 @@ const Messaging = () => {
   };
 
   return (
-    <div className="space-y-6 bg-gray-50 min-h-screen p-4"> {/* Added bg-gray-50 and padding to main div */}
-      <Card className="rounded-2xl shadow-xl h-[600px] flex flex-col bg-white/90 backdrop-blur-sm border border-gray-100"> {/* Apply card styles */}
-        <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-t-2xl flex-shrink-0"> {/* Updated gradient and padding */}
-          <CardTitle className="text-2xl font-bold flex items-center gap-3"> {/* Increased font size and gap, added font-bold */}
-            <Bot className="h-7 w-7" /> {/* Increased icon size */}
+    <div className="space-y-6 bg-gray-900 min-h-screen p-4">
+      <Card className="rounded-2xl shadow-2xl h-[600px] flex flex-col bg-gray-800/30 backdrop-blur-lg border border-gray-700/50">
+        <CardHeader className="bg-gradient-to-r from-indigo-700 to-purple-800 text-white p-6 rounded-t-2xl flex-shrink-0">
+          <CardTitle className="text-2xl font-bold flex items-center gap-3">
+            <Bot className="h-7 w-7" />
             Health Assistant Chat
           </CardTitle>
         </CardHeader>
@@ -129,33 +129,33 @@ const Messaging = () => {
                   }`}
                 >
                   {message.sender === 'bot' && (
-                    <Avatar className="w-8 h-8 flex-shrink-0"> {/* Added flex-shrink-0 */}
-                      <AvatarFallback className="bg-purple-600 text-white"> {/* Updated color */}
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarFallback className="bg-purple-700 text-white">
                         <Bot className="w-4 h-4" />
                       </AvatarFallback>
                     </Avatar>
                   )}
 
                   <div
-                    className={`max-w-[70%] rounded-lg p-3 shadow-md ${ /* Added shadow-md */
+                    className={`max-w-[70%] rounded-lg p-3 shadow-md ${
                       message.sender === 'user'
-                        ? 'bg-purple-600 text-white rounded-br-none' /* Stronger color, no bottom right radius */
-                        : 'bg-gray-100 text-gray-800 rounded-bl-none' /* Light background, no bottom left radius */
+                        ? 'bg-purple-700 text-white rounded-br-none'
+                        : 'bg-gray-800/50 text-gray-100 rounded-bl-none backdrop-blur-lg border border-gray-700/50'
                     }`}
                   >
-                    <p className="text-sm leading-relaxed">{message.content}</p> {/* Added leading-relaxed */}
+                    <p className="text-sm leading-relaxed">{message.content}</p>
                     <p className={`text-xs mt-1 ${
                       message.sender === 'user'
                         ? 'text-white/70'
-                        : 'text-gray-500' /* Updated to a specific gray */
+                        : 'text-gray-400'
                     }`}>
                       {formatTime(message.timestamp)}
                     </p>
                   </div>
 
                   {message.sender === 'user' && (
-                    <Avatar className="w-8 h-8 flex-shrink-0"> {/* Added flex-shrink-0 */}
-                      <AvatarFallback className="bg-gray-200 text-gray-700"> {/* Updated color and text color */}
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarFallback className="bg-gray-700 text-gray-200">
                         <User className="w-4 h-4" />
                       </AvatarFallback>
                     </Avatar>
@@ -167,15 +167,15 @@ const Messaging = () => {
               {isTyping && (
                 <div className="flex gap-3 justify-start">
                   <Avatar className="w-8 h-8 flex-shrink-0">
-                    <AvatarFallback className="bg-purple-600 text-white">
+                    <AvatarFallback className="bg-purple-700 text-white">
                       <Bot className="w-4 h-4" />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="bg-gray-100 text-gray-800 rounded-lg p-3 rounded-bl-none"> {/* Updated color, added rounded-bl-none */}
+                  <div className="bg-gray-800/50 text-gray-100 rounded-lg p-3 rounded-bl-none backdrop-blur-lg border border-gray-700/50">
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div> {/* Consistent color */}
-                      <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-purple-700 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                      <div className="w-2 h-2 bg-purple-700 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-purple-700 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                   </div>
                 </div>
@@ -184,25 +184,25 @@ const Messaging = () => {
           </ScrollArea>
 
           {/* Input Area */}
-          <div className="border-t border-gray-200 p-4 flex-shrink-0 bg-white rounded-b-2xl"> {/* Added border color, bg-white, and bottom radius */}
+          <div className="border-t border-gray-700/50 p-4 flex-shrink-0 bg-gray-800/30 rounded-b-2xl backdrop-blur-lg">
             <div className="flex gap-2">
               <Input
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your health question here..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200" /* Enhanced input styles */
+                className="flex-1 px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-900/50 text-gray-100 placeholder-gray-400"
                 disabled={isTyping}
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!newMessage.trim() || isTyping}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200" /* Enhanced button styles */
+                className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg transition-colors duration-200"
               >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-2 text-center"> {/* Centered and specific text color */}
+            <p className="text-xs text-gray-400 mt-2 text-center">
               This is a demo chatbot. In production, this would connect to your healthcare system.
             </p>
           </div>

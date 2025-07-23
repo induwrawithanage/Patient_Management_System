@@ -14,27 +14,26 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
     { id: 'connections', label: 'Healthcare Connections', icon: Users },
     { id: 'analytics', label: 'Analytics', icon: TrendingUp },
     { id: 'messaging', label: 'Chat', icon: MessageCircle },
-    { id: 'records', label: 'Records', icon: FileBarChart  }
   ];
 
   return (
-    <nav className="bg-white shadow-xl rounded-2xl p-3 mb-6 border border-gray-100"> {/* Apply card-like shadow and rounded corners */}
-      <div className="flex flex-wrap gap-3"> {/* Increased gap for better spacing */}
+    <nav className="bg-black/40 backdrop-blur-lg shadow-xl rounded-2xl p-3 mb-6 border border-white/10">
+      <div className="flex flex-wrap gap-3">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
             <Button
               key={tab.id}
-              variant="ghost" // Always start with ghost to control styles explicitly
+              variant="ghost"
               onClick={() => onTabChange(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 
                 ${activeTab === tab.id
-                  ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md" // Active state with gradient and shadow
-                  : "text-gray-600 hover:bg-gray-100 hover:text-purple-700" // Inactive state with hover effects
+                  ? "bg-black/50 backdrop-blur-md text-white shadow-md border border-white/20 ring-2 ring-purple-400/30"
+                  : "text-gray-200 hover:bg-black/30 hover:text-purple-400 border border-transparent"
                 }`}
             >
-              <Icon className="h-5 w-5" /> {/* Slightly larger icons */}
-              <span className="hidden sm:inline font-medium">{tab.label}</span> {/* Ensure text is hidden on small screens, add font-medium */}
+              <Icon className="h-5 w-5" />
+              <span className="hidden sm:inline font-medium">{tab.label}</span>
             </Button>
           );
         })}

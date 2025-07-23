@@ -6,7 +6,8 @@ import HealthcareConnections from "../components/NewPatient/HealthcareConnection
 import Analytics from "../components/NewPatient/Analytics";
 import Messaging from "../components/NewPatient/Messaging";
 import Records from "./record";
-import { Heart, Shield, MessageCircle } from "lucide-react";
+import DashboardNavbar from '../components/DashboardNavbar';
+// Removed unused lucide-react icons (Heart, Shield, MessageCircle) for cleanliness
 
 const NewPatient = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -23,49 +24,21 @@ const NewPatient = () => {
         return <Analytics />;
       case 'messaging':
         return <Messaging />;
-      case 'records':
-        return <Records />;
       default:
         return <PatientProfile />;
     }
   };
 
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Heart className="h-8 w-8 text-primary" />
-                <Shield className="h-8 w-8 text-secondary" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-foreground">HealthConnect</h1>
-                <p className="text-sm text-muted-foreground">Patient Health Management</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <button 
-                onClick={() => setActiveTab('messaging')}
-                className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
-                title="Health Assistant Chat"
-              >
-                <MessageCircle className="h-5 w-5 text-primary" />
-              </button>
-              <div className="text-sm text-muted-foreground">
-                Welcome, John Doe
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
+      <DashboardNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      {/* Main Content with glassmorphism */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-black/40 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl text-white">
         <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
-        {renderContent()}
+        <div className="mt-6">
+          {renderContent()}
+        </div>
       </main>
     </div>
   );

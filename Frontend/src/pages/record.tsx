@@ -735,16 +735,21 @@
 
 
 
-import React from 'react';
+import React, { useState } from 'react';
 import DoctorHealthcare from '../components/Records/doctorrecords';
 import NormalHealthcare from '../components/Records/patientrecords';
+import DashboardNavbar from '../components/DashboardNavbar';
 
 export default function HealthcareWrapper() {
   const isDoctor = localStorage.getItem('isDoctor') === 'true';
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <>
-      {isDoctor ? <DoctorHealthcare /> : <NormalHealthcare />}
-    </>
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800">
+      <DashboardNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {isDoctor ? <DoctorHealthcare /> : <NormalHealthcare />}
+      </div>
+    </div>
   );
 }

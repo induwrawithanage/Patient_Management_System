@@ -652,23 +652,21 @@ export default function Healthcare() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 p-4">
       <div className="max-w-4xl mx-auto py-8 space-y-8">
-        
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center space-x-3 bg-slate-800/30 backdrop-blur-sm border border-slate-700 rounded-full px-6 py-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+          <div className="inline-flex items-center space-x-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-full px-6 py-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
             <h1 className="text-3xl font-bold text-white">Healthcare Records System</h1>
           </div>
-          
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
-            <div className="bg-slate-700/50 backdrop-blur-sm border border-slate-600 rounded-full px-4 py-2">
-              <span className="text-slate-300 text-sm">Connected: </span>
+            <div className="bg-black/40 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">
+              <span className="text-gray-300 text-sm">Connected: </span>
               <span className="text-cyan-400 font-mono font-semibold">
                 {account.slice(0, 6)}...{account.slice(-4)}
               </span>
@@ -680,18 +678,16 @@ export default function Healthcare() {
             )}
           </div>
         </div>
-
         {/* Fetch Patient Records Card */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl shadow-2xl p-6 space-y-6">
+        <div className="bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-6 space-y-6">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-white">Fetch Patient Records</h2>
           </div>
-          
           <div className="space-y-4">
             <div className="relative">
               <input
@@ -699,12 +695,12 @@ export default function Healthcare() {
                 placeholder="Enter Patient ID"
                 value={fetchPatientID}
                 onChange={(e) => setFetchPatientID(e.target.value)}
-                className="w-full px-6 py-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                className="w-full px-6 py-4 bg-black/30 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-300"
               />
               {fetchPatientID && (
                 <button
                   onClick={() => setFetchPatientID('')}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -712,11 +708,10 @@ export default function Healthcare() {
                 </button>
               )}
             </div>
-            
             <button
               onClick={fetchRecords}
               disabled={!fetchPatientID.trim() || isLoading}
-              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-slate-600 disabled:to-slate-700 text-white font-semibold px-6 py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:scale-100 shadow-lg disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 disabled:from-gray-700 disabled:to-gray-800 text-white font-semibold px-6 py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:scale-100 shadow-lg disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center space-x-2">
@@ -729,9 +724,8 @@ export default function Healthcare() {
             </button>
           </div>
         </div>
-
         {/* Patient Records Display */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl shadow-2xl p-6 space-y-6">
+        <div className="bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-6 space-y-6">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -747,37 +741,34 @@ export default function Healthcare() {
               </div>
             )}
           </div>
-          
           {patientRecords.length > 0 ? (
             <div className="space-y-4">
               {patientRecords.map((record, index) => (
-                <div key={index} className="bg-slate-700/30 border border-slate-600 rounded-xl p-6 space-y-3 hover:bg-slate-700/50 transition-all duration-300">
+                <div key={index} className="bg-black/30 border border-white/20 rounded-xl p-6 space-y-3 hover:bg-black/50 transition-all duration-300">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-3">
                       <div className="flex items-center space-x-4">
-                        <div className="bg-blue-500/20 border border-blue-500 rounded-lg px-3 py-1">
-                          <span className="text-blue-400 font-semibold text-sm">
+                        <div className="bg-cyan-500/20 border border-cyan-500 rounded-lg px-3 py-1">
+                          <span className="text-cyan-300 font-semibold text-sm">
                             ID: {record.recordID.toString()}
                           </span>
                         </div>
-                        <div className="text-slate-400 text-sm">
+                        <div className="text-gray-400 text-sm">
                           {new Date(Number(record.timestamp) * 1000).toLocaleString()}
                         </div>
                       </div>
-                      
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-slate-400 text-sm font-medium">Patient Name</label>
+                          <label className="text-gray-400 text-sm font-medium">Patient Name</label>
                           <p className="text-white font-semibold">{record.patientName}</p>
                         </div>
                         <div>
-                          <label className="text-slate-400 text-sm font-medium">Diagnosis</label>
+                          <label className="text-gray-400 text-sm font-medium">Diagnosis</label>
                           <p className="text-white font-semibold">{record.diagnosis}</p>
                         </div>
                       </div>
-                      
                       <div>
-                        <label className="text-slate-400 text-sm font-medium">Treatment</label>
+                        <label className="text-gray-400 text-sm font-medium">Treatment</label>
                         <p className="text-white font-semibold">{record.treatment}</p>
                       </div>
                     </div>
@@ -787,22 +778,22 @@ export default function Healthcare() {
             </div>
           ) : fetchPatientID ? (
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-slate-700/50 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-black/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <p className="text-slate-400 text-lg">No records found for Patient ID: {fetchPatientID}</p>
-              <p className="text-slate-500 text-sm mt-2">Try searching with a different patient ID</p>
+              <p className="text-gray-400 text-lg">No records found for Patient ID: {fetchPatientID}</p>
+              <p className="text-gray-500 text-sm mt-2">Try searching with a different patient ID</p>
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-slate-700/50 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-black/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <p className="text-slate-400 text-lg">Enter a Patient ID to fetch records</p>
+              <p className="text-gray-400 text-lg">Enter a Patient ID to fetch records</p>
             </div>
           )}
         </div>

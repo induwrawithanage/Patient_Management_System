@@ -170,33 +170,33 @@ const DoctorAppointmentDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg mb-8 p-6">
+        <div className="rounded-2xl shadow-xl mb-8 p-6 backdrop-blur-md bg-white/10 border border-white/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <img
                 src={doctorProfile.avatar}
                 alt={doctorProfile.name}
-                className="w-16 h-16 rounded-full object-cover mr-4"
+                className="w-16 h-16 rounded-full object-cover mr-4 border-4 border-white/20 shadow"
               />
               <div>
-                <h1 className="text-3xl font-bold text-gray-800">{doctorProfile.name}</h1>
-                <p className="text-blue-600 font-medium">{doctorProfile.specialty}</p>
-                <p className="text-gray-600">{doctorProfile.clinic}</p>
+                <h1 className="text-3xl font-bold text-white drop-shadow">{doctorProfile.name}</h1>
+                <p className="text-cyan-300 font-medium">{doctorProfile.specialty}</p>
+                <p className="text-gray-300">{doctorProfile.clinic}</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowAddAvailability(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center"
+                className="bg-cyan-600/80 text-white px-4 py-2 rounded-lg font-medium hover:bg-cyan-700 transition-colors flex items-center shadow"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Availability
               </button>
-              <div className="bg-indigo-100 p-3 rounded-full">
-                <Calendar className="h-8 w-8 text-indigo-600" />
+              <div className="bg-cyan-900/40 p-3 rounded-full">
+                <Calendar className="h-8 w-8 text-cyan-300" />
               </div>
             </div>
           </div>
@@ -204,91 +204,88 @@ const DoctorAppointmentDashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="rounded-xl shadow-lg p-6 backdrop-blur-md bg-white/10 border border-white/20">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Today's Appointments</p>
-                <p className="text-2xl font-bold text-gray-800">{getTodayAppointments().length}</p>
+                <p className="text-gray-300 text-sm">Today's Appointments</p>
+                <p className="text-2xl font-bold text-white">{getTodayAppointments().length}</p>
               </div>
-              <div className="bg-blue-100 p-3 rounded-lg">
-                <Calendar className="h-6 w-6 text-blue-600" />
+              <div className="bg-cyan-900/40 p-3 rounded-lg">
+                <Calendar className="h-6 w-6 text-cyan-300" />
               </div>
             </div>
           </div>
-          
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="rounded-xl shadow-lg p-6 backdrop-blur-md bg-white/10 border border-white/20">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Confirmed</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-gray-300 text-sm">Confirmed</p>
+                <p className="text-2xl font-bold text-green-400">
                   {appointments.filter(apt => apt.status === 'confirmed').length}
                 </p>
               </div>
-              <div className="bg-green-100 p-3 rounded-lg">
-                <Check className="h-6 w-6 text-green-600" />
+              <div className="bg-green-900/40 p-3 rounded-lg">
+                <Check className="h-6 w-6 text-green-400" />
               </div>
             </div>
           </div>
-          
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="rounded-xl shadow-lg p-6 backdrop-blur-md bg-white/10 border border-white/20">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">
+                <p className="text-gray-300 text-sm">Pending</p>
+                <p className="text-2xl font-bold text-yellow-400">
                   {appointments.filter(apt => apt.status === 'pending').length}
                 </p>
               </div>
-              <div className="bg-yellow-100 p-3 rounded-lg">
-                <AlertCircle className="h-6 w-6 text-yellow-600" />
+              <div className="bg-yellow-900/40 p-3 rounded-lg">
+                <AlertCircle className="h-6 w-6 text-yellow-400" />
               </div>
             </div>
           </div>
-          
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="rounded-xl shadow-lg p-6 backdrop-blur-md bg-white/10 border border-white/20">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">High Priority</p>
-                <p className="text-2xl font-bold text-red-600">
+                <p className="text-gray-300 text-sm">High Priority</p>
+                <p className="text-2xl font-bold text-red-400">
                   {appointments.filter(apt => apt.priority === 'high').length}
                 </p>
               </div>
-              <div className="bg-red-100 p-3 rounded-lg">
-                <AlertCircle className="h-6 w-6 text-red-600" />
+              <div className="bg-red-900/40 p-3 rounded-lg">
+                <AlertCircle className="h-6 w-6 text-red-400" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg mb-8">
-          <div className="flex border-b border-gray-200">
+        <div className="rounded-2xl shadow-xl mb-8 backdrop-blur-md bg-white/10 border border-white/20">
+          <div className="flex border-b border-white/20">
             <button
               onClick={() => setActiveTab('today')}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
-                activeTab === 'today'
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+              className={`flex-1 py-4 px-6 text-center font-medium transition-colors rounded-t-2xl
+                ${activeTab === 'today'
+                  ? 'text-cyan-300 bg-white/10 border-b-2 border-cyan-400 shadow-inner backdrop-blur-md'
+                  : 'text-gray-400 hover:text-cyan-200 hover:bg-white/5'}
+              `}
             >
               Today's Appointments
             </button>
             <button
               onClick={() => setActiveTab('upcoming')}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
-                activeTab === 'upcoming'
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+              className={`flex-1 py-4 px-6 text-center font-medium transition-colors rounded-t-2xl
+                ${activeTab === 'upcoming'
+                  ? 'text-cyan-300 bg-white/10 border-b-2 border-cyan-400 shadow-inner backdrop-blur-md'
+                  : 'text-gray-400 hover:text-cyan-200 hover:bg-white/5'}
+              `}
             >
               Upcoming
             </button>
             <button
               onClick={() => setActiveTab('all')}
-              className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
-                activeTab === 'all'
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+              className={`flex-1 py-4 px-6 text-center font-medium transition-colors rounded-t-2xl
+                ${activeTab === 'all'
+                  ? 'text-cyan-300 bg-white/10 border-b-2 border-cyan-400 shadow-inner backdrop-blur-md'
+                  : 'text-gray-400 hover:text-cyan-200 hover:bg-white/5'}
+              `}
             >
               All Appointments
             </button>
@@ -296,7 +293,7 @@ const DoctorAppointmentDashboard = () => {
         </div>
 
         {/* Search and Filter */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div className="rounded-2xl shadow-xl p-6 mb-8 backdrop-blur-md bg-white/10 border border-white/20">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -330,35 +327,35 @@ const DoctorAppointmentDashboard = () => {
           {getFilteredAppointments().map(appointment => (
             <div
               key={appointment.id}
-              className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow"
+              className="rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-shadow backdrop-blur-md bg-white/10 border border-white/20"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start">
-                  <div className="bg-blue-100 p-3 rounded-full mr-4">
-                    <User className="h-6 w-6 text-blue-600" />
+                  <div className="bg-cyan-900/40 p-3 rounded-full mr-4">
+                    <User className="h-6 w-6 text-cyan-300" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-gray-800">{appointment.patientName}</h3>
-                    <p className="text-gray-600">Age: {appointment.patientAge}</p>
+                    <h3 className="font-semibold text-lg text-white drop-shadow">{appointment.patientName}</h3>
+                    <p className="text-gray-300">Age: {appointment.patientAge}</p>
                     <div className="flex items-center mt-1">
-                      <Phone className="h-4 w-4 text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-600">{appointment.patientPhone}</span>
+                      <Phone className="h-4 w-4 text-cyan-300 mr-1" />
+                      <span className="text-sm text-gray-300">{appointment.patientPhone}</span>
                     </div>
                     <div className="flex items-center mt-1">
-                      <Mail className="h-4 w-4 text-gray-400 mr-1" />
-                      <span className="text-sm text-gray-600">{appointment.patientEmail}</span>
+                      <Mail className="h-4 w-4 text-cyan-300 mr-1" />
+                      <span className="text-sm text-gray-300">{appointment.patientEmail}</span>
                     </div>
                   </div>
                 </div>
                 
                 <div className="text-right">
                   <div className="flex items-center justify-end mb-2">
-                    <Calendar className="h-4 w-4 text-gray-400 mr-1" />
-                    <span className="text-sm text-gray-600">{appointment.date}</span>
+                    <Calendar className="h-4 w-4 text-cyan-300 mr-1" />
+                    <span className="text-sm text-gray-300">{appointment.date}</span>
                   </div>
                   <div className="flex items-center justify-end mb-2">
-                    <Clock className="h-4 w-4 text-gray-400 mr-1" />
-                    <span className="text-sm text-gray-600">{appointment.time} ({appointment.duration} min)</span>
+                    <Clock className="h-4 w-4 text-cyan-300 mr-1" />
+                    <span className="text-sm text-gray-300">{appointment.time} ({appointment.duration} min)</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(appointment.status)}`}>
@@ -373,49 +370,49 @@ const DoctorAppointmentDashboard = () => {
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">Appointment Type:</p>
-                  <p className="text-blue-600 font-medium">{appointment.type}</p>
+                  <p className="text-sm font-medium text-gray-200 mb-1">Appointment Type:</p>
+                  <p className="text-cyan-300 font-medium">{appointment.type}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">Symptoms/Reason:</p>
-                  <p className="text-gray-600 text-sm">{appointment.symptoms}</p>
+                  <p className="text-sm font-medium text-gray-200 mb-1">Symptoms/Reason:</p>
+                  <p className="text-gray-300 text-sm">{appointment.symptoms}</p>
                 </div>
               </div>
               
               {appointment.notes && (
                 <div className="mb-4">
-                  <p className="text-sm font-medium text-gray-700 mb-1">Notes:</p>
-                  <p className="text-gray-600 text-sm">{appointment.notes}</p>
+                  <p className="text-sm font-medium text-gray-200 mb-1">Notes:</p>
+                  <p className="text-gray-300 text-sm">{appointment.notes}</p>
                 </div>
               )}
               
-              <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200">
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-white/20">
                 <button
                   onClick={() => updateAppointmentStatus(appointment.id, 'confirmed')}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors flex items-center"
+                  className="bg-green-600/80 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors flex items-center shadow"
                 >
                   <Check className="h-4 w-4 mr-1" />
                   Confirm
                 </button>
                 <button
                   onClick={() => updateAppointmentStatus(appointment.id, 'cancelled')}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors flex items-center"
+                  className="bg-red-600/80 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors flex items-center shadow"
                 >
                   <X className="h-4 w-4 mr-1" />
                   Cancel
                 </button>
                 <button
                   onClick={() => setSelectedAppointment(appointment)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center"
+                  className="bg-cyan-600/80 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-cyan-700 transition-colors flex items-center shadow"
                 >
                   <Edit3 className="h-4 w-4 mr-1" />
                   Edit
                 </button>
-                <button className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors flex items-center">
+                <button className="bg-purple-600/80 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors flex items-center shadow">
                   <Video className="h-4 w-4 mr-1" />
                   Video Call
                 </button>
-                <button className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors flex items-center">
+                <button className="bg-gray-600/80 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors flex items-center shadow">
                   <FileText className="h-4 w-4 mr-1" />
                   Notes
                 </button>
@@ -425,48 +422,48 @@ const DoctorAppointmentDashboard = () => {
         </div>
 
         {getFilteredAppointments().length === 0 && (
-          <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">No appointments found</p>
-            <p className="text-gray-400">Try adjusting your search or filter criteria</p>
+          <div className="rounded-2xl shadow-xl p-12 text-center backdrop-blur-md bg-white/10 border border-white/20">
+            <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <p className="text-white text-lg">No appointments found</p>
+            <p className="text-gray-300">Try adjusting your search or filter criteria</p>
           </div>
         )}
 
         {/* Add Availability Modal */}
         {showAddAvailability && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Add Availability</h3>
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+            <div className="rounded-2xl shadow-2xl max-w-md w-full p-6 backdrop-blur-lg bg-white/10 border border-white/20">
+              <h3 className="text-xl font-semibold text-white mb-4">Add Availability</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                  <label className="block text-sm font-medium text-gray-200 mb-2">Date</label>
                   <input
                     type="date"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-white/20 bg-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
+                  <label className="block text-sm font-medium text-gray-200 mb-2">Start Time</label>
                   <input
                     type="time"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-white/20 bg-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">End Time</label>
+                  <label className="block text-sm font-medium text-gray-200 mb-2">End Time</label>
                   <input
                     type="time"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-white/20 bg-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
                 </div>
               </div>
               <div className="flex gap-3 mt-6">
-                <button className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                <button className="flex-1 bg-cyan-600/80 text-white py-3 px-4 rounded-lg font-medium hover:bg-cyan-700 transition-colors shadow">
                   Add Availability
                 </button>
                 <button
                   onClick={() => setShowAddAvailability(false)}
-                  className="flex-1 border border-gray-300 py-3 px-4 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex-1 border border-white/30 py-3 px-4 rounded-lg font-medium text-white hover:bg-white/10 transition-colors"
                 >
                   Cancel
                 </button>

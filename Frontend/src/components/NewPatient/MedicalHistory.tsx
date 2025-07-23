@@ -443,8 +443,6 @@
 // };
 
 // export default MedicalHistory;
-
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -458,7 +456,7 @@ import {
   Pill,
   Activity,
   TrendingUp,
-  Search
+  Search,
 } from "lucide-react";
 
 interface MedicalRecord {
@@ -491,26 +489,23 @@ const MedicalHistory = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        console.log("API Response:", response);
   
-        // Map API response to MedicalRecord interface
         const mappedRecords: MedicalRecord[] = Array.isArray(response.data.records)
           ? response.data.records.map((record: any) => ({
-              id: record._id, // Map _id to id
-              date: record.date, // Date matches
-              type: record.type || 'visit', // Fallback to 'visit' if type is missing
-              title: record.title || record.prescriptions || 'Medical Record', // Use prescriptions or fallback
-              description: record.notes || record.identifications || 'No description available', // Combine notes and identifications
-              provider: record.provider || response.data.Healthcare.fullname, // Fallback if provider is missing
-              status: record.status || 'completed', // Fallback to 'completed' if status is missing
+              id: record._id,
+              date: record.date,
+              type: record.type || 'visit',
+              title: record.title || record.prescriptions || 'Medical Record',
+              description: record.notes || record.identifications || 'No description available',
+              provider: record.provider || response.data.Healthcare.fullname,
+              status: record.status || 'completed',
             }))
           : [];
   
         setRecords(mappedRecords);
-        console.log("Mapped Records:", mappedRecords);
       } catch (error) {
         console.error("Failed to fetch medical records:", error);
-        setRecords([]); // Set empty array on error to avoid breaking the UI
+        setRecords([]);
       }
     };
   
@@ -520,43 +515,43 @@ const MedicalHistory = () => {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'visit':
-        return <Activity className="h-4 w-4" />;
+        return <Activity className="h-4 w-4 text-blue-400" />;
       case 'prescription':
-        return <Pill className="h-4 w-4" />;
+        return <Pill className="h-4 w-4 text-green-400" />;
       case 'test':
-        return <TrendingUp className="h-4 w-4" />;
+        return <TrendingUp className="h-4 w-4 text-purple-400" />;
       case 'vaccination':
-        return <FileText className="h-4 w-4" />;
+        return <FileText className="h-4 w-4 text-orange-400" />;
       default:
-        return <FileText className="h-4 w-4" />;
+        return <FileText className="h-4 w-4 text-gray-400" />;
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'visit':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-900/50 text-blue-300 ring-blue-700/50';
       case 'prescription':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-900/50 text-green-300 ring-green-700/50';
       case 'test':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-900/50 text-purple-300 ring-purple-700/50';
       case 'vaccination':
-        return 'bg-orange-100 text-orange-800';
+        return 'bg-orange-900/50 text-orange-300 ring-orange-700/50';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-900/50 text-gray-300 ring-gray-700/50';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-900/50 text-green-300 ring-green-700/50';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-900/50 text-yellow-300 ring-yellow-700/50';
       case 'upcoming':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-900/50 text-blue-300 ring-blue-700/50';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-900/50 text-gray-300 ring-gray-700/50';
     }
   };
 
@@ -569,7 +564,6 @@ const MedicalHistory = () => {
     });
   };
 
-  // Filter records based on search term
   const filteredRecords = Array.isArray(records)
     ? records.filter((record) =>
         [record.title, record.description, record.provider, record.type]
@@ -579,21 +573,16 @@ const MedicalHistory = () => {
       )
     : [];
 
-  // Sort filtered records by date (descending)
   const sortedRecords = [...filteredRecords].sort((a, b) =>
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
-  const handleViewDetails = (recordId: string) => {
-    navigate(`/medical-record/${recordId}`);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 p-6 sm:p-8 flex items-start justify-center">
+    <div className="min-h-screen p-6 sm:p-8 flex items-start justify-center transition-colors duration-300 bg-gray-900 text-gray-100">
       <div className="w-full max-w-5xl space-y-6">
-        <Card className="rounded-2xl shadow-xl border border-gray-100 bg-white/90 backdrop-blur-sm">
-          <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-t-2xl">
-            <CardTitle className="text-2xl font-bold flex items-center gap-3">
+        <Card className="rounded-2xl shadow-xl border bg-gray-800/90 border-gray-700">
+          <CardHeader className="p-6 rounded-t-2xl flex flex-row items-center justify-between bg-gradient-to-r from-gray-800 to-gray-700">
+            <CardTitle className="text-2xl font-bold flex items-center gap-3 text-white">
               <FileText className="h-7 w-7" />
               Medical History
             </CardTitle>
@@ -606,20 +595,20 @@ const MedicalHistory = () => {
                   placeholder="Search medical records by title, description, provider, or type..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 border rounded-lg shadow-sm transition-all duration-200 bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
                 />
               </div>
             </div>
 
             {sortedRecords.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 bg-gray-50 rounded-lg border border-gray-100">
+              <div className="text-center py-12 rounded-lg border bg-gray-800/50 border-gray-700 text-gray-300">
                 <FileText className="h-16 w-16 mx-auto mb-4 opacity-40 text-gray-400" />
                 <p className="text-lg font-semibold mb-2">
                   {searchTerm
                     ? "No records found matching your search."
                     : "No medical history available."}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm">
                   {searchTerm
                     ? "Try adjusting your search terms."
                     : "Your medical records will appear here as they are added or updated."}
@@ -638,48 +627,41 @@ const MedicalHistory = () => {
                         : record.type === "test"
                         ? "border-purple-500"
                         : "border-orange-500"
-                    } rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out bg-white`}
+                    } rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out bg-gray-800/90`}
                   >
                     <CardContent className="p-5">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2 sm:gap-0">
                         <div className="flex items-center gap-2">
                           {getTypeIcon(record.type)}
-                          <h3 className="font-bold text-xl text-gray-800">
+                          <h3 className="font-bold text-xl text-gray-100">
                             {record.title}
                           </h3>
                           <Badge
-                            className={`${getTypeColor(
-                              record.type
-                            )} text-xs px-2 py-0.5 rounded-full ring-1`}
+                            className={`${getTypeColor(record.type)} text-xs px-2 py-0.5 rounded-full ring-1`}
                           >
-                            {record.type.charAt(0).toUpperCase() +
-                              record.type.slice(1)}
+                            {record.type.charAt(0).toUpperCase() + record.type.slice(1)}
                           </Badge>
                           {record.status && (
                             <Badge
-                              className={`${getStatusColor(
-                                record.status
-                              )} text-xs px-2 py-0.5 rounded-full ring-1`}
+                              className={`${getStatusColor(record.status)} text-xs px-2 py-0.5 rounded-full ring-1`}
                             >
-                              {record.status.charAt(0).toUpperCase() +
-                                record.status.slice(1)}
+                              {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
                             </Badge>
                           )}
                         </div>
-                        <div className="flex items-center gap-1 text-sm text-gray-500 mt-1 sm:mt-0">
+                        <div className="flex items-center gap-1 text-sm text-gray-300 mt-1 sm:mt-0">
                           <Calendar className="h-4 w-4" />
                           <span>{formatDate(record.date)}</span>
                         </div>
                       </div>
 
-                      <p className="text-gray-600 mb-3 leading-relaxed line-clamp-2">
+                      <p className="mb-3 leading-relaxed line-clamp-2 text-gray-300">
                         {record.description}
                       </p>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                        <p className="text-sm text-gray-700 font-medium">
-                          Provider:{" "}
-                          <span className="text-gray-800">
+                      <div className="flex items-center justify-between pt-2 border-t border-gray-700">
+                        <p className="text-sm font-medium text-gray-200">
+                          Provider: <span className="text-gray-100">
                             {record.provider}
                           </span>
                         </p>
@@ -688,7 +670,7 @@ const MedicalHistory = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewDetails(record.id)}
-                          className="text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 transition-colors duration-200 px-3 py-1.5 flex items-center gap-1"
+                          className="transition-colors duration-200 px-3 py-1.5 flex items-center gap-1 text-purple-400 border-purple-600/50 hover:bg-purple-900/50"
                         >
                           View Details
                         </Button>
