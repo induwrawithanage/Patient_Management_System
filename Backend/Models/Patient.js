@@ -14,6 +14,8 @@ const patientSchema = new mongoose.Schema({
   bloodgroup: { type: String, default: "undefined" },
   address: { type: String, default: "undefined" },
   blockchainAddress: {type: String},
+  sex:{type:String},
+  coonected_doctors:{type: Array, default: []},
   recordHashes: [
     {
       blockchainTxHash: {

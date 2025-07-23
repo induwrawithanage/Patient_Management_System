@@ -11,4 +11,8 @@ const parametersSchema = new mongoose.Schema({
   timestamps: true  // ✅ This adds createdAt and updatedAt automatically
 });
 
+<<<<<<< HEAD
 export default mongoose.model("Parameters", parametersSchema);
+=======
+export default mongoose.model("Parameters", parametersSchema);
+>>>>>>> 05c1002feccfd193ec62384bce1036f11e03f365
