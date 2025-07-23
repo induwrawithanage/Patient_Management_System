@@ -590,7 +590,7 @@ export const getinformation = async (req, res) => {
     // Find medical records for this patient
     const records = await Medical.find({ patient_id: user.userId }).lean();
 
-    const Healthcare=await Doctor.findOne({ patient_id: records.doctor_id }).select("-password -_id").lean();
+    const Healthcare=await Doctor.find({ patient_id: records.doctor_id }).select("-password -_id").lean();
 
     console.log("Fetched Records:", records);
 

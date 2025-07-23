@@ -35,63 +35,62 @@ const HealthcareConnections = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch healthcare provider from API
-  useEffect(() => {
-    const fetchHealthcareProvider = async () => {
-      setIsLoading(true);
-      try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
-          console.error("Access token not found.");
-          toast({
-            title: "Authentication Error",
-            description: "Please log in to access healthcare provider information.",
-            variant: "destructive"
-          });
-          return;
-        }
-
-        const response = await axios.get("http://localhost:3000/patient/getinformation", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        const healthcareData = response.data.Healthcare;
-        if (healthcareData) {
-          const mappedProvider: HealthcareProvider = {
-            id: Date.now().toString(), // Generate a unique ID (or use a field from API if available)
-            name: healthcareData.fullname,
-            type: healthcareData.role as 'doctor' | 'nurse' | 'specialist' | 'therapist', // Map role to type
-            specialty: healthcareData.specialty || "General Medicine", // Fallback
-            hospital: healthcareData.hospital || "Unknown Hospital", // Fallback
-            phone: healthcareData.phone,
-            email: healthcareData.email
-          };
-
-          // Merge with existing connections or replace
-          setConnections(prev => {
-            // Avoid duplicates by checking if the provider already exists (e.g., by email)
-            const exists = prev.some(c => c.email === mappedProvider.email);
-            if (!exists) {
-              return [...prev, mappedProvider];
-            }
-            return prev;
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch healthcare provider:", error);
+ useEffect(() => {
+  const fetchHealthcareProvider = async () => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.error("Access token not found.");
         toast({
-          title: "Error",
-          description: "Failed to fetch healthcare provider information.",
+          title: "Authentication Error",
+          description: "Please log in to access healthcare provider information.",
           variant: "destructive"
         });
-      } finally {
-        setIsLoading(false);
+        return;
       }
-    };
 
-    fetchHealthcareProvider();
-  }, []);
+      const response = await axios.get("http://localhost:3000/patient/getinformation", {
+        headers: {
+          Authorization: `Bearer ${token}` // Fixed template literal syntax
+        }
+      });
+      console.log(response.data);
+      const healthcareData = response.data.Healthcare;
+
+      if (Array.isArray(healthcareData)) {
+        const mappedProviders: HealthcareProvider[] = healthcareData.map((data: any, index: number) => ({
+          id: data.id || Date.now().toString() + index, // Ensure unique ID
+          name: data.fullname || "Unknown Provider", // Fallback for undefined
+          type: (data.role as 'doctor' | 'nurse' | 'specialist' | 'therapist') || 'doctor', // Fallback
+          specialty: data.specialty || "General Medicine",
+          hospital: data.hospital || "Unknown Hospital",
+          phone: data.phone || "N/A",
+          email: data.email || ""
+        }));
+
+        setConnections(prev => {
+          // Merge new providers, avoiding duplicates by email
+          const newProviders = mappedProviders.filter(
+            newProvider => !prev.some(c => c.email === newProvider.email && newProvider.email)
+          );
+          return [...prev, ...newProviders];
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch healthcare provider:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch healthcare provider information.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchHealthcareProvider();
+}, [toast]); // Add toast to dependencies to avoid stale closure issues
 
   const getTypeIcon = (type: HealthcareProvider['type']) => {
     switch (type) {
