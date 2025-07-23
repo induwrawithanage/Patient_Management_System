@@ -12,6 +12,7 @@ import SignupPatient from './pages/SignupPatient'
 import AddRecordForm from './pages/record';
 import Appointment from './pages/Appointment';
 import NewPatient from './pages/NewPatient';
+import Dashboardnew from './pages/Dashboard'
 import MedicalRecordDetail from './components/NewPatient/MedicalRecordDetail'
 import ReportWrapper from './pages/reports'
 function App() {
@@ -28,7 +29,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboardnew />} />
         <Route path="/patient-profile" element={<PatientProfilePage />} />
         <Route path="/patient-profile/:patientId" element={<PatientProfilePage />} />
         <Route path="/patient-profile" element={<PatientProfile />} />

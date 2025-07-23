@@ -307,6 +307,7 @@ const PatientProfile = () => {
     .then((res) => {
       const user = res.data.user;
       const params = res.data.parameters;
+      console.log(params);
   
       const fetchedData: PatientData = {
         name: user.fullname || "N/A",

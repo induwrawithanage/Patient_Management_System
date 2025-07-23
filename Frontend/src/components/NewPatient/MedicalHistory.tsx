@@ -232,6 +232,219 @@
 // export default MedicalHistory;
 
 
+// import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+// import { Badge } from "../ui/badge";
+// import { Button } from "../ui/button";
+// import { Input } from "../ui/input";
+// import {
+//   Calendar,
+//   FileText,
+//   Pill,
+//   Activity,
+//   TrendingUp,
+//   Search
+// } from "lucide-react";
+
+// interface MedicalRecord {
+//   id: string;
+//   date: string;
+//   type: 'visit' | 'prescription' | 'test' | 'vaccination';
+//   title: string;
+//   description: string;
+//   provider: string;
+//   status?: 'completed' | 'pending' | 'upcoming';
+// }
+
+// const MedicalHistory = () => {
+//   const navigate = useNavigate();
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [records, setRecords] = useState<MedicalRecord[]>([]);
+
+//   // Fetch medical records from API
+//   useEffect(() => {
+//     const fetchMedicalRecords = async () => {
+//       try {
+//         const token = localStorage.getItem("accessToken");
+//         if (!token) {
+//           console.error("Access token not found.");
+//           return;
+//         }
+
+//         const response = await axios.get("http://localhost:3000/patient/getinformation", {
+//           headers: {
+//             Authorization: `Bearer ${token}`
+//           }
+//         });
+
+//         // Assuming response.data is an array of medical records
+//         setRecords(response.data);
+//       } catch (error) {
+//         console.error("Failed to fetch medical records:", error);
+//       }
+//     };
+
+//     fetchMedicalRecords();
+//   }, []);
+
+//   const getTypeIcon = (type: string) => {
+//     switch (type) {
+//       case 'visit':
+//         return <Activity className="h-4 w-4" />;
+//       case 'prescription':
+//         return <Pill className="h-4 w-4" />;
+//       case 'test':
+//         return <TrendingUp className="h-4 w-4" />;
+//       case 'vaccination':
+//         return <FileText className="h-4 w-4" />;
+//       default:
+//         return <FileText className="h-4 w-4" />;
+//     }
+//   };
+
+//   const getTypeColor = (type: string) => {
+//     switch (type) {
+//       case 'visit':
+//         return 'bg-blue-100 text-blue-800';
+//       case 'prescription':
+//         return 'bg-green-100 text-green-800';
+//       case 'test':
+//         return 'bg-purple-100 text-purple-800';
+//       case 'vaccination':
+//         return 'bg-orange-100 text-orange-800';
+//       default:
+//         return 'bg-gray-100 text-gray-800';
+//     }
+//   };
+
+//   const getStatusColor = (status: string) => {
+//     switch (status) {
+//       case 'completed':
+//         return 'bg-green-100 text-green-800';
+//       case 'pending':
+//         return 'bg-yellow-100 text-yellow-800';
+//       case 'upcoming':
+//         return 'bg-blue-100 text-blue-800';
+//       default:
+//         return 'bg-gray-100 text-gray-800';
+//     }
+//   };
+
+//   const formatDate = (dateString: string) => {
+//     const date = new Date(dateString);
+//     return date.toLocaleDateString('en-US', {
+//       year: 'numeric',
+//       month: 'long',
+//       day: 'numeric'
+//     });
+//   };
+
+//   // const filteredRecords = records.filter(record =>
+//   //   console.log(record),
+//   // );
+
+//   const sortedRecords = [...filteredRecords].sort((a, b) =>
+//     new Date(b.date).getTime() - new Date(a.date).getTime()
+//   );
+
+//   const handleViewDetails = (recordId: string) => {
+//     navigate(`/medical-record/${recordId}`);
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 p-6 sm:p-8 flex items-start justify-center">
+//       <div className="w-full max-w-5xl space-y-6">
+//         <Card className="rounded-2xl shadow-xl border border-gray-100 bg-white/90 backdrop-blur-sm">
+//           <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-t-2xl">
+//             <CardTitle className="text-2xl font-bold flex items-center gap-3">
+//               <FileText className="h-7 w-7" />
+//               Medical History
+//             </CardTitle>
+//           </CardHeader>
+//           <CardContent className="p-6 sm:p-8">
+//             <div className="mb-6">
+//               <div className="relative">
+//                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+//                 <Input
+//                   placeholder="Search medical records by title, description, provider, or type..."
+//                   value={searchTerm}
+//                   onChange={(e) => setSearchTerm(e.target.value)}
+//                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+//                 />
+//               </div>
+//             </div>
+
+//             {sortedRecords.length === 0 ? (
+//               <div className="text-center py-12 text-gray-500 bg-gray-50 rounded-lg border border-gray-100">
+//                 <FileText className="h-16 w-16 mx-auto mb-4 opacity-40 text-gray-400" />
+//                 <p className="text-lg font-semibold mb-2">{searchTerm ? 'No records found matching your search.' : 'No medical history available.'}</p>
+//                 <p className="text-sm text-gray-500">{searchTerm ? 'Try adjusting your search terms.' : 'Your medical records will appear here as they are added or updated.'}</p>
+//               </div>
+//             ) : (
+//               <div className="grid gap-4">
+//                 {sortedRecords.map((record) => (
+//                   <Card
+//                     key={record.id}
+//                     className={`border-l-4 ${
+//                       record.type === 'visit' ? 'border-blue-500' :
+//                       record.type === 'prescription' ? 'border-green-500' :
+//                       record.type === 'test' ? 'border-purple-500' :
+//                       'border-orange-500'
+//                     } rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out bg-white`}
+//                   >
+//                     <CardContent className="p-5">
+//                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2 sm:gap-0">
+//                         <div className="flex items-center gap-2">
+//                           {getTypeIcon(record.type)}
+//                           <h3 className="font-bold text-xl text-gray-800">{record.title}</h3>
+//                           <Badge className={`${getTypeColor(record.type)} text-xs px-2 py-0.5 rounded-full ring-1`}>
+//                             {record.type.charAt(0).toUpperCase() + record.type.slice(1)}
+//                           </Badge>
+//                           {record.status && (
+//                             <Badge className={`${getStatusColor(record.status)} text-xs px-2 py-0.5 rounded-full ring-1`}>
+//                               {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+//                             </Badge>
+//                           )}
+//                         </div>
+//                         <div className="flex items-center gap-1 text-sm text-gray-500 mt-1 sm:mt-0">
+//                           <Calendar className="h-4 w-4" />
+//                           <span>{formatDate(record.date)}</span>
+//                         </div>
+//                       </div>
+
+//                       <p className="text-gray-600 mb-3 leading-relaxed line-clamp-2">{record.description}</p>
+
+//                       <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+//                         <p className="text-sm text-gray-700 font-medium">
+//                           Provider: <span className="text-gray-800">{record.provider}</span>
+//                         </p>
+
+//                         <Button
+//                           variant="outline"
+//                           size="sm"
+//                           onClick={() => handleViewDetails(record.id)}
+//                           className="text-purple-600 border-purple-200 hover:bg-purple-50 hover:border-purple-300 transition-colors duration-200 px-3 py-1.5 flex items-center gap-1"
+//                         >
+//                           View Details
+//                         </Button>
+//                       </div>
+//                     </CardContent>
+//                   </Card>
+//                 ))}
+//               </div>
+//             )}
+//           </CardContent>
+//         </Card>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default MedicalHistory;
+
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -272,20 +485,35 @@ const MedicalHistory = () => {
           console.error("Access token not found.");
           return;
         }
-
+  
         const response = await axios.get("http://localhost:3000/patient/getinformation", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-
-        // Assuming response.data is an array of medical records
-        setRecords(response.data);
+        console.log("API Response:", response);
+  
+        // Map API response to MedicalRecord interface
+        const mappedRecords: MedicalRecord[] = Array.isArray(response.data.records)
+          ? response.data.records.map((record: any) => ({
+              id: record._id, // Map _id to id
+              date: record.date, // Date matches
+              type: record.type || 'visit', // Fallback to 'visit' if type is missing
+              title: record.title || record.prescriptions || 'Medical Record', // Use prescriptions or fallback
+              description: record.notes || record.identifications || 'No description available', // Combine notes and identifications
+              provider: record.provider || response.data.Healthcare.fullname, // Fallback if provider is missing
+              status: record.status || 'completed', // Fallback to 'completed' if status is missing
+            }))
+          : [];
+  
+        setRecords(mappedRecords);
+        console.log("Mapped Records:", mappedRecords);
       } catch (error) {
         console.error("Failed to fetch medical records:", error);
+        setRecords([]); // Set empty array on error to avoid breaking the UI
       }
     };
-
+  
     fetchMedicalRecords();
   }, []);
 
@@ -341,13 +569,17 @@ const MedicalHistory = () => {
     });
   };
 
-  const filteredRecords = records.filter(record =>
-    record.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    record.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    record.provider.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    record.type.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter records based on search term
+  const filteredRecords = Array.isArray(records)
+    ? records.filter((record) =>
+        [record.title, record.description, record.provider, record.type]
+          .some((field) =>
+            field.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+      )
+    : [];
 
+  // Sort filtered records by date (descending)
   const sortedRecords = [...filteredRecords].sort((a, b) =>
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
@@ -382,8 +614,16 @@ const MedicalHistory = () => {
             {sortedRecords.length === 0 ? (
               <div className="text-center py-12 text-gray-500 bg-gray-50 rounded-lg border border-gray-100">
                 <FileText className="h-16 w-16 mx-auto mb-4 opacity-40 text-gray-400" />
-                <p className="text-lg font-semibold mb-2">{searchTerm ? 'No records found matching your search.' : 'No medical history available.'}</p>
-                <p className="text-sm text-gray-500">{searchTerm ? 'Try adjusting your search terms.' : 'Your medical records will appear here as they are added or updated.'}</p>
+                <p className="text-lg font-semibold mb-2">
+                  {searchTerm
+                    ? "No records found matching your search."
+                    : "No medical history available."}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {searchTerm
+                    ? "Try adjusting your search terms."
+                    : "Your medical records will appear here as they are added or updated."}
+                </p>
               </div>
             ) : (
               <div className="grid gap-4">
@@ -391,23 +631,38 @@ const MedicalHistory = () => {
                   <Card
                     key={record.id}
                     className={`border-l-4 ${
-                      record.type === 'visit' ? 'border-blue-500' :
-                      record.type === 'prescription' ? 'border-green-500' :
-                      record.type === 'test' ? 'border-purple-500' :
-                      'border-orange-500'
+                      record.type === "visit"
+                        ? "border-blue-500"
+                        : record.type === "prescription"
+                        ? "border-green-500"
+                        : record.type === "test"
+                        ? "border-purple-500"
+                        : "border-orange-500"
                     } rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out bg-white`}
                   >
                     <CardContent className="p-5">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2 sm:gap-0">
                         <div className="flex items-center gap-2">
                           {getTypeIcon(record.type)}
-                          <h3 className="font-bold text-xl text-gray-800">{record.title}</h3>
-                          <Badge className={`${getTypeColor(record.type)} text-xs px-2 py-0.5 rounded-full ring-1`}>
-                            {record.type.charAt(0).toUpperCase() + record.type.slice(1)}
+                          <h3 className="font-bold text-xl text-gray-800">
+                            {record.title}
+                          </h3>
+                          <Badge
+                            className={`${getTypeColor(
+                              record.type
+                            )} text-xs px-2 py-0.5 rounded-full ring-1`}
+                          >
+                            {record.type.charAt(0).toUpperCase() +
+                              record.type.slice(1)}
                           </Badge>
                           {record.status && (
-                            <Badge className={`${getStatusColor(record.status)} text-xs px-2 py-0.5 rounded-full ring-1`}>
-                              {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+                            <Badge
+                              className={`${getStatusColor(
+                                record.status
+                              )} text-xs px-2 py-0.5 rounded-full ring-1`}
+                            >
+                              {record.status.charAt(0).toUpperCase() +
+                                record.status.slice(1)}
                             </Badge>
                           )}
                         </div>
@@ -417,11 +672,16 @@ const MedicalHistory = () => {
                         </div>
                       </div>
 
-                      <p className="text-gray-600 mb-3 leading-relaxed line-clamp-2">{record.description}</p>
+                      <p className="text-gray-600 mb-3 leading-relaxed line-clamp-2">
+                        {record.description}
+                      </p>
 
                       <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                         <p className="text-sm text-gray-700 font-medium">
-                          Provider: <span className="text-gray-800">{record.provider}</span>
+                          Provider:{" "}
+                          <span className="text-gray-800">
+                            {record.provider}
+                          </span>
                         </p>
 
                         <Button
