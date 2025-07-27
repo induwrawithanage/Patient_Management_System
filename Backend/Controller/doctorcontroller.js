@@ -326,6 +326,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import User from '../Models/Doctor.js';
+import Patient from '../Models/Patient.js';
 import nodemailer from 'nodemailer';
 dotenv.config();
 
@@ -643,4 +644,26 @@ export const refreshToken = (req, res) => {
       accessToken: newAccessToken,
     });
   });
+};
+
+ export const searchPatient = async (req, res) => {
+  try {
+      // Extract the 'name' from the request body
+      const {id} = req.query;
+      // Validate that the 'id' parameter is provided
+      if (!id) {
+          return res.status(400).json({ error: "Patient ID is required." });
+      }
+      // Query MongoDB for patients with a partial ID match (case-insensitive)
+      const patients = await Patient.find({ national_id: { $regex: id, $options: "i" } });
+      if (patients.length === 0) {
+          return res.status(404).json({ message: "No patient found." });
+      }
+
+      // Respond with the found patients
+      res.status(200).json(patients);
+  } catch (error) {
+      console.error("Error searching patient:", error);
+      res.status(500).json({ error: "Internal server error." });
+  }
 };
