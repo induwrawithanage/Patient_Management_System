@@ -591,7 +591,7 @@ export const getinformation = async (req, res) => {
     const records = await Medical.find({ patient_id: user.userId }).lean();
 
     const Healthcare=await Doctor.find({ patient_id: records.doctor_id }).select("-password -_id").lean();
-
+    console.log(Healthcare);
     console.log("Fetched Records:", records);
 
     // If no parameters, return 404

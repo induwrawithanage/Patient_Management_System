@@ -6,9 +6,10 @@ const navItems = [
   { label: 'Patients', to: '/patient-profile' },
   { label: 'Appointments', to: '/appointments' },
   { label: 'Reports', to: '/reports' },
-  { label: 'Settings', to: '/settings' },
   { label: 'Records', to: '/records' },
-  { label: 'AddPatient', to: '/addpatient' }
+  { label: 'AddPatient', to: '/addpatient' },
+    { label: 'Settings', to: '/settings' },
+
 ];
 
 const DashboardNavbar = ({ menuOpen, setMenuOpen }) => (
