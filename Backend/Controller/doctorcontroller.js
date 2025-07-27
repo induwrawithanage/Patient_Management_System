@@ -328,6 +328,9 @@ import dotenv from 'dotenv';
 import User from '../Models/Doctor.js';
 import Patient from '../Models/Patient.js';
 import nodemailer from 'nodemailer';
+import Parameters from '../Models/parameterss.js';
+import Medical from "../Models/MedicalHistory.js";
+
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -660,10 +663,45 @@ export const refreshToken = (req, res) => {
           return res.status(404).json({ message: "No patient found." });
       }
 
-      // Respond with the found patients
       res.status(200).json(patients);
   } catch (error) {
       console.error("Error searching patient:", error);
       res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+
+export const getinformationpatient = async (req, res) => {
+  try {
+    const {id} = req.query;
+
+   
+    const patient=await Patient.findOne({national_id: id }).lean();
+     console.log(patient);
+      console.log(patient.fullname);
+    // Find parameter details for this patient
+    const parameters = await Parameters.findOne({ patient_id: patient._id }).lean();
+    
+    console.log("Fetched Parameters:", parameters);
+    // Find medical records for this patient
+    const records = await Medical.find({ patient_id: patient._id }).lean();
+
+    console.log("Fetched Records:", records);
+
+    // If no parameters, return 404
+    if (!parameters) {
+      return res.status(404).json({ message: "No parameter details found for this user" });
+    }
+
+    // Return user profile, parameter details, and medical records
+    res.json({
+      message: "User profile with parameter details and medical records",
+      parameters,
+      records, // will be an array [] if no records found
+     
+    });
+  } catch (error) {
+    console.error("Error fetching user information:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
